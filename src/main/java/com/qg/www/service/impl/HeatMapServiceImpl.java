@@ -29,6 +29,11 @@ public class HeatMapServiceImpl implements HeatMapService  {
     @Resource
     Point point;
 
+    /**
+     *
+     * @param data 数据中包含两个点的经纬度和当前的请求时间
+     * @return 带权点集
+     */
     @Override
     public InteractionData querySomeTimesMap(InteractionData data) {
 
