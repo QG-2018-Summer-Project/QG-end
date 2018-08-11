@@ -2,6 +2,7 @@ package com.qg.www.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 /**
  * @author net
@@ -10,17 +11,18 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@Service("point")
 public class Point {
     /**
      * 经度；
      */
-    private Double lon;
+    private double lon;
     /**
      * 纬度；
      */
-    private Double lat;
+    private double lat;
     /**
      * 权值；
      */
-    private Integer weight;
+    private int weight;
 }

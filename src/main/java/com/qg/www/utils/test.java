@@ -1,3 +1,4 @@
+/*
 package com.qg.www.utils;
 
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -40,3 +41,4 @@ public class test {
         }
     }
 }
+*/

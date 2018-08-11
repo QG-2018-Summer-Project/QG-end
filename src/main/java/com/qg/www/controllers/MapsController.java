@@ -1,11 +1,16 @@
 package com.qg.www.controllers;
 
 import com.qg.www.models.InteractionData;
+import com.qg.www.models.Point;
+import com.qg.www.service.impl.HeatMapServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+
 
 /**
  * @author net
@@ -20,10 +25,12 @@ public class MapsController {
      * @param data 数据中包含两个点的经纬度和当前的请求时间；
      * @return json格式的带权点集；
      */
+    @Resource
+    HeatMapServiceImpl heatMapService;
     @ResponseBody
-    @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST)
-    public String getLiveMap(@RequestBody InteractionData data){
-        return null;
+    @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST ,produces="application/json")
+    public String getLiveMap(@RequestBody  InteractionData interactionData){
+        return  null;
     }
 
     /**
@@ -33,7 +40,7 @@ public class MapsController {
      */
     @ResponseBody
     @RequestMapping(value = "/querymap",method = RequestMethod.POST)
-    public String querySomeTimesMap(@RequestBody InteractionData data){
-        return null;
+    public InteractionData querySomeTimesMap(@RequestBody InteractionData data){
+        return heatMapService.querySomeTimesMap(data);
     }
 }

@@ -2,6 +2,7 @@ package com.qg.www.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Service("interactionData")
 public class InteractionData {
     /**
      *左上角经度
