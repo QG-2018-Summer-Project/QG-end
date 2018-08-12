@@ -1,10 +1,12 @@
 package com.qg.www.models;
 
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Service("interactionData")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InteractionData {
     /**
      *左上角经度

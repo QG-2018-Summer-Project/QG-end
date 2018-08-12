@@ -1,9 +1,9 @@
 package com.qg.www.utils;
 
-import com.qg.www.models.Point;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.HashMap;
 
 /**
  * @author taxi
@@ -15,7 +15,7 @@ public class GeoHashUtil {
     /**
      * 经纬度单独编码长度
      */
-    private static int numbits = 4 * 4;
+    private static int numbits = 6*5;
     /**
      * 32位编码对应字符
      */
@@ -130,41 +130,17 @@ public class GeoHashUtil {
         char[] buf = new char[65];
         int charPos = 64;
         boolean negative = (i < 0);
-        if (!negative){
+        if (!negative)
             i = -i;
-        }
         while (i <= -32) {
             buf[charPos--] = digits[(int) (-(i % 32))];
             i /= 32;
         }
         buf[charPos] = digits[(int) (-i)];
 
-        if (negative){
+        if (negative)
             buf[--charPos] = '-';
-        }
         return new String(buf, charPos, (65 - charPos));
-    }
-
-    public List<Point>  decodeAll(Map<String, Integer> maps){
-        List<Point> list = new ArrayList<>();
-        // 模拟将GeoHash的值转化为经纬度
-        Set entries = maps.entrySet( );
-        if(entries != null) {
-            Iterator iterator = entries.iterator( );
-            while(iterator.hasNext( )) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                // GeoHash解码
-                double[] lonAndLat = decode((String) entry.getKey());
-                Point point = new Point();
-                // 设置经纬度和权重
-                point.setLon(lonAndLat[0]);
-                point.setLat(lonAndLat[1]);
-                point.setWeight((Integer) entry.getValue());
-                // 加入集合
-                list.add(point);
-            }
-        }
-        return list;
     }
 
 }

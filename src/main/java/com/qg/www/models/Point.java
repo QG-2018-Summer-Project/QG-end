@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Setter
 @Getter
-@Service(value = "point")
+@Service("point")
 @Scope("prototype")
 public class Point {
     /**
@@ -23,10 +23,6 @@ public class Point {
      * 纬度；
      */
     private double lat;
-    /**
-     * GeoHash值
-     */
-    private String geoHash;
     /**
      * 权值；
      */
