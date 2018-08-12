@@ -15,7 +15,7 @@ public class GeoHashUtil {
     /**
      * 经纬度单独编码长度
      */
-    private static int numbits = 4 * 4;
+    private static int numbits = 6*5;
     /**
      * 32位编码对应字符
      */
@@ -143,11 +143,4 @@ public class GeoHashUtil {
         return new String(buf, charPos, (65 - charPos));
     }
 
-    public static void main(String[] args)  throws Exception{
-        GeoHashUtil geohash = new GeoHashUtil();
-        String s = geohash.encode(45, 125);
-        System.out.println(s);
-        double[] geo = geohash.decode(s);
-        System.out.println(geo[0]+" "+geo[1]);
-    }
 }

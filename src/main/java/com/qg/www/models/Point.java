@@ -2,6 +2,7 @@ package com.qg.www.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Setter
 @Getter
 @Service("point")
+@Scope("prototype")
 public class Point {
     /**
      * 经度；
