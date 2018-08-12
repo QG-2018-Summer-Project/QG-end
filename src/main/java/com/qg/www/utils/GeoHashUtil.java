@@ -1,9 +1,11 @@
 package com.qg.www.utils;
 
+import com.qg.www.models.GeoHash;
+import com.qg.www.models.Point;
 import org.springframework.stereotype.Service;
 
-import java.util.BitSet;
-import java.util.HashMap;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * @author taxi
@@ -12,6 +14,9 @@ import java.util.HashMap;
  */
 @Service("geoHashUtil")
 public class GeoHashUtil {
+
+    @Resource
+    GeoHash geoHash;
     /**
      * 经纬度单独编码长度
      */
@@ -130,17 +135,42 @@ public class GeoHashUtil {
         char[] buf = new char[65];
         int charPos = 64;
         boolean negative = (i < 0);
-        if (!negative)
+        if (!negative){
             i = -i;
+        }
         while (i <= -32) {
             buf[charPos--] = digits[(int) (-(i % 32))];
             i /= 32;
         }
         buf[charPos] = digits[(int) (-i)];
 
-        if (negative)
+        if (negative){
             buf[--charPos] = '-';
+        }
         return new String(buf, charPos, (65 - charPos));
     }
 
+    /**
+     * 将所有解码
+     * @param list GeoHash的带权集合
+     * @return 经纬度的带权集合
+     */
+    public List<Point> decodeAll(List<GeoHash> list){
+        Iterator<GeoHash> iterator = list.iterator();
+        List<Point> pointList = new LinkedList<>();
+        while (iterator.hasNext()) {
+            //创建新的对象；
+            Point point = new Point();
+            geoHash = iterator.next();
+            System.out.println(geoHash.getGeohash()+"权重："+geoHash.getWeight());
+            //获取经纬度；
+            double[] lonAndLat = decode(geoHash.getGeohash());
+            point.setLon(lonAndLat[1]);
+            point.setLat(lonAndLat[0]);
+            point.setWeight(geoHash.getWeight());
+            //加入列表；
+            pointList.add(point);
+        }
+        return pointList;
+    }
 }

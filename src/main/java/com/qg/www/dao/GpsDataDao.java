@@ -1,6 +1,7 @@
 package com.qg.www.dao;
 
 import com.qg.www.models.GeoHash;
+import com.qg.www.models.InteractionData;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,21 +13,12 @@ import java.util.List;
  */
 public interface GpsDataDao {
     /**
-     *查询某段时间的热力图；
-     * @param leftTopLon 左上角经度
-     * @param leftTopLat 左上角纬度
-     * @param rightBottomLon 右下角经度
-     * @param rightBottomLat 右下角纬度
-     * @param startTime 开始时间
-     * @param endTime 结束时间
-     * @return 该矩阵区域的某段时间内个GeoHash方块中的权值
+     *
+     * 根据空间与时间范围得到GeoHash的权重
+     * @param data 左上角与右下角的经纬度以及时间范围
+     * @return 在以上范围内每个GeoHash块中出现的车的数量
      */
-    List<GeoHash> listGeoHashAndNumByTimeAndLonAndBat(@Param("leftTopLon") Double leftTopLon,
-                                                      @Param("leftTopLat") Double leftTopLat,
-                                                      @Param("rightBottomLon") Double rightBottomLon,
-                                                      @Param("rightBottomLat") Double rightBottomLat,
-                                                      @Param("startTime") String startTime,
-                                                      @Param("endTime") String endTime);
+    List<GeoHash> listGeoHashAndNumByTimeAndLonAndBat(InteractionData data);
 
 
 }

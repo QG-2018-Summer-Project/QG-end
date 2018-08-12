@@ -28,8 +28,8 @@ public class MapsController {
      */
     @ResponseBody
     @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST ,produces="application/json")
-    public String getLiveMap(@RequestBody  InteractionData interactionData){
-        return  null;
+    public InteractionData getLiveMap(@RequestBody  InteractionData interactionData){
+        return heatMapService.getLiveMap(interactionData);
     }
 
     /**
