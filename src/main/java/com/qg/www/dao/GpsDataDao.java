@@ -1,5 +1,6 @@
 package com.qg.www.dao;
 
+import com.qg.www.models.Point;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -18,16 +19,16 @@ public interface GpsDataDao {
      * @param leftTopLat 左上角纬度
      * @param rightBottomLon 右下角经度
      * @param rightBottomLat 右下角纬度
-     * @param beginTime 开始时间
+     * @param startTime 开始时间
      * @param endTime 结束时间
      * @return 该矩阵区域的某段时间内个GeoHash方块中的权值
      */
-    Map<String,Integer> listGeoHashAndNumByTimeAndLonAndBat(@Param("leftTopLon") Double leftTopLon,
-                                                    @Param("leftTopBat") Double leftTopLat,
+    List<Point> listGeoHashAndNumByTimeAndLonAndBat(@Param("leftTopLon") Double leftTopLon,
+                                                    @Param("leftTopLat") Double leftTopLat,
                                                     @Param("rightBottomLon") Double rightBottomLon,
-                                                    @Param("rightBottomBat") Double rightBottomLat,
-                                                    @Param("beginTime") Date beginTime,
-                                                    @Param("endTime") Date endTime);
+                                                    @Param("rightBottomLat") Double rightBottomLat,
+                                                    @Param("startTime") String startTime,
+                                                    @Param("endTime") String endTime);
 
 
 }

@@ -1,3 +1,4 @@
+/*
 package com.qg.www.controllers;
 
 import com.qg.www.models.InteractionData;
@@ -12,19 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 
 
-/**
+*
  * @author net
  * @version 1.0
  * 地图展示控制器
- */
+
+
 @Controller
 @RequestMapping("/maps")
 public class MapsController {
-    /**
+*
      *获取实况热力图；
      * @param data 数据中包含两个点的经纬度和当前的请求时间；
      * @return json格式的带权点集；
-     */
+
+
     @Resource
     HeatMapServiceImpl heatMapService;
     @ResponseBody
@@ -33,14 +36,16 @@ public class MapsController {
         return  null;
     }
 
-    /**
+*
      * 查询某段时间的热力图；
      * @param data 数据中包含两个点的经纬度和请求的时间段；
      * @return json格式的带权点集；
-     */
+
+
     @ResponseBody
-    @RequestMapping(value = "/querymap",method = RequestMethod.POST)
+    @RequestMapping(value = "/querymap",method = RequestMethod.POST,produces="application/json")
     public InteractionData querySomeTimesMap(@RequestBody InteractionData data){
         return heatMapService.querySomeTimesMap(data);
     }
 }
+*/

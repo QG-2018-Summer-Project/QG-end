@@ -15,4 +15,6 @@ public interface HeatMapService {
      * @return 带权点集
      */
     InteractionData querySomeTimesMap(InteractionData data);
+
+    InteractionData getLiveMap(InteractionData data);
 }

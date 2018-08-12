@@ -1,3 +1,4 @@
+/*
 package com.qg.www.service.impl;
 
 
@@ -13,11 +14,13 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+*/
 /**
  * @author net
  * @version 1.0
  * 热力图业务实现类
- */
+ *//*
+
 @Service("heatMapService")
 public class HeatMapServiceImpl implements HeatMapService  {
     @Resource
@@ -29,22 +32,27 @@ public class HeatMapServiceImpl implements HeatMapService  {
     @Resource
     Point point;
 
-    /**
+    */
+/**
      *
      * @param data 数据中包含两个点的经纬度和当前的请求时间
      * @return 带权点集
-     */
+     *//*
+
     @Override
     public InteractionData querySomeTimesMap(InteractionData data) {
 
-        // 将时间设置为从当前时间到15分钟前的这个时间段
+        */
+/*//*
+/ 将时间设置为从当前时间到15分钟前的这个时间段
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         calendar.setTime(data.getCurrentTime());
         data.setStartTime(data.getCurrentTime());
         calendar.add(Calendar.HOUR,0-0-15);
-        data.setStartTime(calendar.getTime());
+        data.setStartTime(calendar.getTime());*//*
+
 
         // 得到该矩阵区域的某段时间内个GeoHash方块中的权值
         Map<String,Integer> points = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data.getLeftTopLon(),data.getLeftTopLat(),
@@ -72,4 +80,14 @@ public class HeatMapServiceImpl implements HeatMapService  {
         return interactionData;
 
     }
+
+    @Override
+    public InteractionData getLiveMap(InteractionData data) {
+        Map<String,Integer> points = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data.getLeftTopLon(),data.getLeftTopLat(),
+                data.getRightBottomLon(),data.getRightBottomLat(),data.getStartTime(),data.getEndTime());
+
+        interactionData.setPointSet(geoHashUtil.decodeAll(points));
+        return interactionData;
+    }
 }
+*/

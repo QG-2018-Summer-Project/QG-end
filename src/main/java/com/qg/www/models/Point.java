@@ -2,6 +2,7 @@ package com.qg.www.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
  */
 @Setter
 @Getter
-@Service("point")
+@Service(value = "point")
+@Scope("prototype")
 public class Point {
     /**
      * 经度；
@@ -21,6 +23,10 @@ public class Point {
      * 纬度；
      */
     private double lat;
+    /**
+     * GeoHash值
+     */
+    private String geoHash;
     /**
      * 权值；
      */

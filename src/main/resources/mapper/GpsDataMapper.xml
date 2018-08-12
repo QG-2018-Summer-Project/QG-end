@@ -18,16 +18,25 @@
     HOUR_REPRE
   </sql>
 
-  <select id="listGeoHashAndNumByTimeAndLonAndBat" resultMap="Map">
-    GEOHASH,COUNT(GEOHASH) AS num
+  <select id="listGeoHashAndNumByTimeAndLonAndBat" resultType="point">
+    SELECT GEOHASH,COUNT(GEOHASH) AS weight
     FROM
     gpsdata1
-    WHERE (GPS_TIME BETWEEN ${startTime} AND ${lastTime})
+    WHERE (GPS_TIME BETWEEN '${startTime}' AND '${endTime}')
     AND (LONGITUDE BETWEEN ${leftTopLon} AND ${rightBottomLon})
     AND (LATITUDE BETWEEN ${leftTopLat} AND ${rightBottomLat})
     GROUP BY GEOHASH;
   </select>
 
+  <select id="listGeoHashAndNumByCurrentTimeAndLonAndBat" resultMap="Map">
+    SELECT GEOHASH,COUNT(GEOHASH) AS weight
+    FROM
+    gpsdata1
+    WHERE (GPS_TIME = '${currentTime}')
+    AND (LONGITUDE BETWEEN ${leftTopLon} AND ${rightBottomLon})
+    AND (LATITUDE BETWEEN ${leftTopLat} AND ${rightBottomLat})
+    GROUP BY GEOHASH;
+  </select>
 
 
 </mapper>

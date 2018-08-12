@@ -35,7 +35,7 @@ public class InteractionData {
     /**
      *当前时间；
      */
-    private Date currentTime;
+    private String currentTime;
     /**
      * 返回点集；
      */
@@ -43,9 +43,9 @@ public class InteractionData {
     /**
      * 起始时间；
      */
-    private Date startTime;
+    private String startTime;
     /**
      * 结束时间；
      */
-    private Date endTime;
+    private String endTime;
 }
