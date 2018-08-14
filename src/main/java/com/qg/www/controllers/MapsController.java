@@ -27,7 +27,7 @@ public class MapsController {
      * @return json格式的带权点集；
      */
     @ResponseBody
-    @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST ,produces="application/json")
+    @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST )
     public InteractionData getLiveMap(@RequestBody  InteractionData interactionData){
         return heatMapService.getLiveMap(interactionData);
     }

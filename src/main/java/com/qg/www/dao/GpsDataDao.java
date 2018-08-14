@@ -1,7 +1,9 @@
 package com.qg.www.dao;
 
+import com.qg.www.models.DmInteractionData;
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.InteractionData;
+import com.qg.www.models.Point;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,5 +22,6 @@ public interface GpsDataDao {
      */
     List<GeoHash> listGeoHashAndNumByTimeAndLonAndBat(InteractionData data);
 
+    List<GeoHash> listGeoHashByTime(DmInteractionData data);
 
 }

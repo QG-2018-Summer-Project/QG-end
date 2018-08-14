@@ -61,7 +61,7 @@ public class HeatMapServiceImpl implements HeatMapService {
             e.printStackTrace();
         }
         data.setEndTime(data.getCurrentTime());
-        calendar.add(Calendar.SECOND,0-15);
+        calendar.add(Calendar.SECOND,-15);
         data.setStartTime(sdf.format(calendar.getTime()));
         System.out.println(data.getStartTime() + ":" + data.getEndTime());
 
