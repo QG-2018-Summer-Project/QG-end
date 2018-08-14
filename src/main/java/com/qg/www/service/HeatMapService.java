@@ -11,15 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface HeatMapService {
     /**
      *查询某时间段的热力图
-     * @param data 数据中包含两个点的经纬度和请求时间段；
+     * @param data 数据中包含两个点的经纬度和当前的请求时间
      * @return 带权点集
      */
     InteractionData querySomeTimesMap(InteractionData data);
 
-    /**
-     * 查询实况热力图；
-     * @param data 数据中包含两个点的经纬度和当前的请求时间
-     * @return 带权点集
-     */
-    InteractionData queryCurrentMap(InteractionData data);
+    InteractionData getLiveMap(InteractionData data);
 }
