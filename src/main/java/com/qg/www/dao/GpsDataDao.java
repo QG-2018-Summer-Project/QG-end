@@ -1,10 +1,11 @@
 package com.qg.www.dao;
 
-import com.qg.www.models.DmInteractionData;
+import com.qg.www.dtos.InteractionData;
+import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
-import com.qg.www.models.InteractionData;
-import com.qg.www.models.Point;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public interface GpsDataDao {
      */
     List<GeoHash> listGeoHashAndNumByTimeAndLonAndBat(InteractionData data);
 
-    List<GeoHash> listGeoHashByTime(DmInteractionData data);
+    @Select("select * from tezheng_xuqiuliang")
+    List<Feature> query();
+
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    @Insert("insert into demand7 (lon,lat,geohash,month1,day1,hour1,dure1,dure2,dure3,dure4,dure5,dure6,dure7,one,two,three,four,five,true1)Values(" +
+            "#{lon},#{lat},#{geohash},#{month1},#{day1},#{hour1},#{dure1},#{dure2},#{dure3},#{dure4},#{dure5},#{dure6},#{dure7},#{one},#{two},#{three},#{four},#{five},#{true1})")
+    void add(Feature bigData);
 
 }

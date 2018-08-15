@@ -1,12 +1,16 @@
 package com.qg.www.controllers;
 
-import com.qg.www.models.InteractionData;
-import com.qg.www.models.Point;
+import com.qg.www.dao.GpsDataDao;
+import com.qg.www.dtos.InteractionData;
+import com.qg.www.models.Feature;
 import com.qg.www.service.impl.HeatMapServiceImpl;
+import com.qg.www.utils.GeoHashUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -42,4 +46,12 @@ public class MapsController {
     public InteractionData querySomeTimesMap(@RequestBody InteractionData data){
         return heatMapService.querySomeTimesMap(data);
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/demanded",method = RequestMethod.POST)
+    public InteractionData getdemandedMap(@RequestBody InteractionData data){
+        return heatMapService.getDemandMap(data);
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.qg.www.service;
 
-import com.qg.www.models.InteractionData;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import com.qg.www.dtos.InteractionData;
 
 /**
  * @author net
@@ -17,4 +17,6 @@ public interface HeatMapService {
     InteractionData querySomeTimesMap(InteractionData data);
 
     InteractionData getLiveMap(InteractionData data);
+
+    InteractionData getDemandMap(InteractionData data);
 }
