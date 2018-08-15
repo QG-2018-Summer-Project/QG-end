@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service("countTrait")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Feature {
-    private int id;
+    private Integer id;
     private String geohash;
 
     private Double lon;

@@ -3,8 +3,10 @@ package com.qg.www.controllers;
 import com.qg.www.dao.GpsDataDao;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.models.Feature;
+import com.qg.www.models.Rate;
 import com.qg.www.service.impl.HeatMapServiceImpl;
 import com.qg.www.utils.GeoHashUtil;
+import org.apache.http.protocol.ResponseDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,12 @@ public class MapsController {
 
     @Resource
     HeatMapServiceImpl heatMapService;
+    @Resource
+    GpsDataDao gpsDataDao;
+    @Resource
+    Rate rate;
+    @Resource
+    GeoHashUtil geoHashUtil;
     /**
      *获取实况热力图；
      * @param interactionData 数据中包含两个点的经纬度和当前的请求时间；
@@ -48,10 +56,10 @@ public class MapsController {
     }
 
 
+
     @ResponseBody
     @RequestMapping(value = "/demanded",method = RequestMethod.POST)
-    public InteractionData getdemandedMap(@RequestBody InteractionData data){
+    public ResponseDate getdemandedMap(@RequestBody InteractionData data){
         return heatMapService.getDemandMap(data);
     }
-
 }

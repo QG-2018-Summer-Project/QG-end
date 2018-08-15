@@ -22,7 +22,7 @@ public class PredictController {
     @ResponseBody
     @RequestMapping(value = "/xuqiuliang", method = RequestMethod.POST)
     public InteractionData xuqiuliang(@RequestBody RequestData<Feature> requestData){
-        System.out.println(requestData.getDay1());
+        System.out.println(requestData.getDay());
         GeoHash geoHash = new GeoHash();
         geoHash.setGeohash("as");
         geoHash.setWeight(12);

@@ -2,6 +2,7 @@ package com.qg.www.service;
 
 
 import com.qg.www.dtos.InteractionData;
+import org.apache.http.protocol.ResponseDate;
 
 /**
  * @author net
@@ -18,5 +19,5 @@ public interface HeatMapService {
 
     InteractionData getLiveMap(InteractionData data);
 
-    InteractionData getDemandMap(InteractionData data);
+    ResponseDate getDemandMap(InteractionData data);
 }

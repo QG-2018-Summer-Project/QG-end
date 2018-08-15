@@ -13,6 +13,7 @@ import com.qg.www.service.HeatMapService;
 import com.qg.www.utils.GeoHashUtil;
 import com.qg.www.utils.HttpClient;
 import com.qg.www.utils.TimeUtil;
+import org.apache.http.protocol.ResponseDate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +42,8 @@ public class HeatMapServiceImpl implements HeatMapService {
     TimeUtil timeUtil;
     @Resource
     HttpClient httpClient;
+    @Resource
+    ResponseDate responseDate;
 
     /**
      * 查询某时间段的热力图
@@ -86,13 +89,13 @@ public class HeatMapServiceImpl implements HeatMapService {
     }
 
     @Override
-    public InteractionData getDemandMap(InteractionData data) {
+    public ResponseDate getDemandMap(InteractionData data) {
         RequestData<Feature> countTraitRequestData = new RequestData<>();
-        countTraitRequestData.setTime(Integer.parseInt(data.getPredictedTime().substring(11, 13)));
+        countTraitRequestData.setHour(Integer.parseInt(data.getPredictedTime().substring(11, 13)));
         String table = "";
         try {
             // 得到应该查询的数据表
-            table = timeUtil.getDemandTable(data.getPredictedTime(),"demand");
+            table = timeUtil.getDemandTable(data.getPredictedTime(),"need");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -104,18 +107,17 @@ public class HeatMapServiceImpl implements HeatMapService {
         Integer hour1 = Integer.parseInt(data.getPredictedTime().substring(11, 13));
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
-        requestData.setDay1(day1);
-        requestData.setHour1(hour1);
-        requestData.setMonth1(month1);
+        requestData.setDay(day1);
+        requestData.setHour(hour1);
+        requestData.setMonth(month1);
         requestData.setList(featureList);
 
-        System.out.println(featureList.get(1).getDay1());
         try {
-            data = httpClient.demandedCount("http://127.0.0.1:8080/predict/xuqiuliang",requestData);
+            ResponseDate responseDate = httpClient.demandedCount("http://127.0.0.1:8080/predict/xuqiuliang",requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return responseDate;
     }
 }

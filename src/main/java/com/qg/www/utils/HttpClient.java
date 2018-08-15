@@ -3,20 +3,19 @@ package com.qg.www.utils;
 
 import com.qg.www.dtos.RequestData;
 import com.qg.www.models.Feature;
-import com.qg.www.models.GeoHash;
-import com.qg.www.models.Point;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
-import com.qg.www.dtos.InteractionData;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.ResponseDate;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +24,8 @@ import java.util.List;
 @Service
 public class HttpClient {
 
+    @Resource
+    ResponseDate responseDate;
     /**
      * 与数据挖掘端交互数据
      * @param url 发送的URL
@@ -32,7 +33,7 @@ public class HttpClient {
      * @return
      * @throws IOException
      */
-    public InteractionData demandedCount(String url, RequestData<Feature> requestData) throws IOException {
+    public ResponseDate demandedCount(String url, RequestData<Feature> requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData);
@@ -59,8 +60,8 @@ public class HttpClient {
             if (response.getStatusLine().getStatusCode() == 200) {
                 strJson = EntityUtils.toString(entity,"UTF-8").trim();
                 // TODO 暂时使用前端交互的点集
-                InteractionData data = gson.fromJson(strJson,InteractionData.class);
-                return data;
+                responseDate = gson.fromJson(strJson,ResponseDate.class);
+                return responseDate;
             }
             return null;
         } finally {
