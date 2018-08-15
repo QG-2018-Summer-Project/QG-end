@@ -3,9 +3,9 @@ package com.qg.www.service.impl;
 
 import com.qg.www.dao.FeatureDao;
 import com.qg.www.dao.GpsDataDao;
-import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
+import com.qg.www.dtos.ResponseData;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
@@ -36,11 +36,11 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Resource
     GeoHashUtil geoHashUtil;
     @Resource
-    InteractionData interactionData;
-    @Resource
     TimeUtil timeUtil;
     @Resource
     HttpClient httpClient;
+    @Resource
+    ResponseData responseData;
 
     /**
      * 查询某时间段的热力图
@@ -49,19 +49,15 @@ public class HeatMapServiceImpl implements HeatMapService {
      * @return 带权点集
      */
     @Override
-    public InteractionData querySomeTimesMap(InteractionData data) {
-
-        // 得到该矩阵区域的某段时间内个GeoHash方块中的权值
-        /*  Map<String,Integer> points = */
-
-        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data);
+    public ResponseData querySomeTimesMap(InteractionData data) {
+        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data);
         List<Point> pointList = geoHashUtil.decodeAll(list);
-        interactionData.setPointSet(pointList);
-        return interactionData;
+        responseData.setPointSet(pointList);
+        return responseData;
     }
 
     @Override
-    public InteractionData getLiveMap(InteractionData data) {
+    public ResponseData getLiveMap(InteractionData data) {
         // 将时间设置为从当前时间到15秒前的这个时间段
         Calendar calendar = Calendar.getInstance();
         System.out.println(calendar);
@@ -77,45 +73,76 @@ public class HeatMapServiceImpl implements HeatMapService {
         data.setStartTime(sdf.format(calendar.getTime()));
         System.out.println(data.getStartTime() + ":" + data.getEndTime());
 
-        // 得到该矩阵区域的某段时间内个GeoHash方块中的权值
-        /*  Map<String,Integer> points = */
-        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data);
+        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data);
         List<Point> pointList = geoHashUtil.decodeAll(list);
-        interactionData.setPointSet(pointList);
-        return interactionData;
+        responseData.setPointSet(pointList);
+        return responseData;
     }
 
     @Override
-    public InteractionData getDemandMap(InteractionData data) {
-        RequestData<Feature> countTraitRequestData = new RequestData<>();
-        countTraitRequestData.setTime(Integer.parseInt(data.getPredictedTime().substring(11, 13)));
+    public ResponseData getDemandMap(InteractionData data) {
         String table = "";
         try {
             // 得到应该查询的数据表
-            table = timeUtil.getDemandTable(data.getPredictedTime(),"demand");
+            table = timeUtil.getDemandTable(data.getPredictedTime(), "need");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        // 得到表中的所有信息
-        List<Feature> featureList = featureDao.listAllFeature(table);
         // 截取预测时间的日期天数和时间
-        Integer month1 = Integer.parseInt(data.getPredictedTime().substring(5, 7));
-        Integer day1 = Integer.parseInt(data.getPredictedTime().substring(8, 10));
-        Integer hour1 = Integer.parseInt(data.getPredictedTime().substring(11, 13));
+        Integer month = Integer.parseInt(data.getPredictedTime().substring(5, 7));
+        Integer day = Integer.parseInt(data.getPredictedTime().substring(8, 10));
+        Integer hour = Integer.parseInt(data.getPredictedTime().substring(11, 13));
+        // 得到表中的所有信息
+        List<Feature> featureList = featureDao.listAllFeature(table,data,hour);
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
-        requestData.setDay1(day1);
-        requestData.setHour1(hour1);
-        requestData.setMonth1(month1);
+        requestData.setDay1(day);
+        requestData.setHour1(hour);
+        requestData.setMonth1(month);
         requestData.setList(featureList);
-
-        System.out.println(featureList.get(1).getDay1());
         try {
-            data = httpClient.demandedCount("http://127.0.0.1:8080/predict/xuqiuliang",requestData);
+            data = httpClient.demandedCount("http://127.0.0.1:8080/qgtaxi/predict/xuqiuliang", requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    /**
+     * 获取预测汽车数量热力图；
+     *
+     * @param data 数据中包含两个点的经纬度和当前的请求时间
+     * @return 带权点集
+     */
+    @Override
+    public ResponseData getPredictCarMap(InteractionData data) {
+        String table = "";
+        try {
+            // 得到应该查询的数据表
+            table = timeUtil.getDemandTable(data.getPredictedTime(), "data");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // 截取预测时间的日期天数和时间
+        Integer month = Integer.parseInt(data.getPredictedTime().substring(5, 7));
+        Integer day = Integer.parseInt(data.getPredictedTime().substring(8, 10));
+        Integer hour = Integer.parseInt(data.getPredictedTime().substring(11, 13));
+        // 得到表中的所有信息
+        List<Feature> featureList = featureDao.listAllFeature(table,data,hour);
+        // 将各参数放入交互model中
+        RequestData<Feature> requestData = new RequestData<>();
+        requestData.setDay1(day);
+        requestData.setHour1(hour);
+        requestData.setMonth1(month);
+        requestData.setList(featureList);
+
+        System.out.println(featureList.get(1).getDay1());
+        try {
+            data = httpClient.demandedCount("http://127.0.0.1:8080/qgtaxi/predict/xuqiuliang", requestData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

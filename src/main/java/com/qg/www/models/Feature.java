@@ -6,12 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author net
+ * @version 1.0
+ * 特征值；
+ */
 @Getter
 @Setter
 @Service("countTrait")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Feature {
-    private int id;
+    private Integer id;
     private String geohash;
 
     private Double lon;

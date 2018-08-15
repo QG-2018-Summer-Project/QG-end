@@ -17,10 +17,6 @@ import java.util.List;
 @Service("requestData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestData<T> {
-    /**
-     * 预测的时间段，用0-23中的一个数字；
-     */
-    private Integer time;
 
     private Integer month1;
 

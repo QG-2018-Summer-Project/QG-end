@@ -1,16 +1,11 @@
 package com.qg.www.controllers;
 
-import com.qg.www.dao.GpsDataDao;
 import com.qg.www.dtos.InteractionData;
-import com.qg.www.models.Feature;
+import com.qg.www.dtos.ResponseData;
 import com.qg.www.service.impl.HeatMapServiceImpl;
-import com.qg.www.utils.GeoHashUtil;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**
@@ -18,7 +13,7 @@ import java.util.List;
  * @version 1.0
  * 地图展示控制器
  */
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("/maps")
 public class MapsController {
@@ -30,9 +25,8 @@ public class MapsController {
      * @param interactionData 数据中包含两个点的经纬度和当前的请求时间；
      * @return json格式的带权点集；
      */
-    @ResponseBody
-    @RequestMapping(value = "/liveheatmap",method = RequestMethod.POST )
-    public InteractionData getLiveMap(@RequestBody  InteractionData interactionData){
+    @PostMapping("/liveheatmap")
+    public ResponseData getLiveMap(@RequestBody  InteractionData interactionData){
         return heatMapService.getLiveMap(interactionData);
     }
 
@@ -41,17 +35,29 @@ public class MapsController {
      * @param data 数据中包含两个点的经纬度和请求的时间段；
      * @return json格式的带权点集；
      */
-    @ResponseBody
-    @RequestMapping(value = "/querymap",method = RequestMethod.POST)
-    public InteractionData querySomeTimesMap(@RequestBody InteractionData data){
+    @PostMapping("/querymap")
+    public ResponseData querySomeTimesMap(@RequestBody InteractionData data){
         return heatMapService.querySomeTimesMap(data);
     }
 
-
-    @ResponseBody
-    @RequestMapping(value = "/demanded",method = RequestMethod.POST)
-    public InteractionData getdemandedMap(@RequestBody InteractionData data){
+    /**
+     * 获取汽车需求量的热力图；
+     * @param data 数据中包含两个点的经纬度和请求的时间段；
+     * @return json格式的带权点集；
+     */
+    @PostMapping("/demanded")
+    public ResponseData getDemandedMap(@RequestBody InteractionData data){
         return heatMapService.getDemandMap(data);
     }
 
+    /**
+     *预测汽车数量热力图；
+     * @param data 数据中包含两个点的经纬度和请求的时间段；
+     * @return json格式的带权点集；
+     */
+    @PostMapping("/count")
+    public ResponseData getPredictCarMap(@RequestBody InteractionData data){
+
+        return null;
+    }
 }
