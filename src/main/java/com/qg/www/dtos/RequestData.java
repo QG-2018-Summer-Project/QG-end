@@ -21,6 +21,12 @@ public class RequestData<T> {
      * 预测的时间段，用0-23中的一个数字；
      */
     private Integer time;
+
+    private Integer month1;
+
+    private Integer hour1;
+
+    private Integer day1;
     /**
      * 数据列表；
      */

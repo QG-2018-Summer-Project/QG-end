@@ -1,7 +1,7 @@
 package com.qg.www.service;
 
+
 import com.qg.www.dtos.InteractionData;
-import com.qg.www.dtos.ResponseData;
 
 /**
  * @author net
@@ -10,26 +10,13 @@ import com.qg.www.dtos.ResponseData;
  */
 public interface HeatMapService {
     /**
-     * 查询某时间段的热力图
-     *
+     *查询某时间段的热力图
      * @param data 数据中包含两个点的经纬度和当前的请求时间
      * @return 带权点集
      */
-    ResponseData querySomeTimesMap(InteractionData data);
+    InteractionData querySomeTimesMap(InteractionData data);
 
-    /**
-     * 查询某时间段的热力图
-     *
-     * @param data 数据中包含两个点的经纬度和当前的请求时间
-     * @return 带权点集
-     */
-    ResponseData getLiveMap(InteractionData data);
+    InteractionData getLiveMap(InteractionData data);
 
-    /**
-     * 预测某区域，某时间段的热力图；
-     *
-     * @param data 数据中包含两个点的经纬度和请求时间点；
-     * @return
-     */
-    ResponseData predictMap(InteractionData data);
+    InteractionData getDemandMap(InteractionData data);
 }

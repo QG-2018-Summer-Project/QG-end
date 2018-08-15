@@ -2,6 +2,7 @@ package com.qg.www.utils;
 
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
+import org.junit.Test;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,7 +31,7 @@ public class GeoHashUtil {
     /**
      * 定义编码映射关系
      */
-    final static HashMap<Character, Integer> lookup = new HashMap<Character, Integer>();
+    final static HashMap<Character, Integer> lookup = new HashMap<>();
     //初始化编码映射内容
     static {
         int i = 0;
@@ -38,8 +39,6 @@ public class GeoHashUtil {
             lookup.put(c, i++);
         }
     }
-
-    //
 
     /**
      * 对编码后的字符串解码
@@ -49,7 +48,6 @@ public class GeoHashUtil {
     public double[] decode(String geohash) {
         StringBuilder buffer = new StringBuilder();
         for (char c : geohash.toCharArray()) {
-
             int i = lookup.get(c) + 32;
             buffer.append( Integer.toString(i, 2).substring(1) );
         }
@@ -126,5 +124,11 @@ public class GeoHashUtil {
             pointList.add(point);
         }
         return pointList;
+    }
+
+    @Test
+    public void encode(){
+//        System.out.println(encode(23.11416,113.24082));
+        System.out.println(decode("ws0s114"));
     }
 }

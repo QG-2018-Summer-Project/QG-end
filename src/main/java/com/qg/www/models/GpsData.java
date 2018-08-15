@@ -1,7 +1,12 @@
 package com.qg.www.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class GpsData {
     private Long id;
 

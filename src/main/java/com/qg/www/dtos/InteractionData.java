@@ -1,6 +1,5 @@
 package com.qg.www.dtos;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.qg.www.models.Point;
 import lombok.Getter;
@@ -12,13 +11,17 @@ import java.util.List;
 /**
  * @author net
  * @version 1.0
- * 接收前端传送的交互数据处理实体类
+ * 前端与后台交互数据处理实体类
  */
 @Getter
 @Setter
 @Service("interactionData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InteractionData {
+    /**
+     * 状态码
+     */
+    private String status;
     /**
      * 左上角经度
      */
@@ -51,4 +54,8 @@ public class InteractionData {
      * 结束时间；
      */
     private String endTime;
+    /**
+     * 预测时间
+     */
+    private String predictedTime;
 }
