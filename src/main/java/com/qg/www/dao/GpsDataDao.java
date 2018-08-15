@@ -1,8 +1,7 @@
 package com.qg.www.dao;
 
 import com.qg.www.models.GeoHash;
-import com.qg.www.models.InteractionData;
-import org.apache.ibatis.annotations.Param;
+import com.qg.www.dtos.InteractionData;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public interface GpsDataDao {
      * @param data 左上角与右下角的经纬度以及时间范围
      * @return 在以上范围内每个GeoHash块中出现的车的数量
      */
-    List<GeoHash> listGeoHashAndNumByTimeAndLonAndBat(InteractionData data);
+    List<GeoHash> listGeoHashAndNumByTimeAndLonAndLat(InteractionData data);
 
 
 }

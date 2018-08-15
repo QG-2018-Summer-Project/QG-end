@@ -2,8 +2,9 @@ package com.qg.www.service.impl;
 
 
 import com.qg.www.dao.GpsDataDao;
+import com.qg.www.dtos.ResponseData;
 import com.qg.www.models.GeoHash;
-import com.qg.www.models.InteractionData;
+import com.qg.www.dtos.InteractionData;
 import com.qg.www.models.Point;
 import com.qg.www.service.HeatMapService;
 import com.qg.www.utils.GeoHashUtil;
@@ -13,8 +14,6 @@ import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,11 +24,11 @@ import java.util.List;
 @Service("heatMapService")
 public class HeatMapServiceImpl implements HeatMapService {
     @Resource
-    GpsDataDao gpsDataDao;
+    private GpsDataDao gpsDataDao;
     @Resource
-    GeoHashUtil geoHashUtil;
+    private GeoHashUtil geoHashUtil;
     @Resource
-    InteractionData interactionData;
+    private ResponseData<Point> responseData;
 
     /**
      * 查询某时间段的热力图
@@ -38,21 +37,17 @@ public class HeatMapServiceImpl implements HeatMapService {
      * @return 带权点集
      */
     @Override
-    public InteractionData querySomeTimesMap(InteractionData data) {
-
-        // 得到该矩阵区域的某段时间内个GeoHash方块中的权值
-        /*  Map<String,Integer> points = */
-        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data);
+    public ResponseData querySomeTimesMap(InteractionData data) {
+        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data);
         List<Point> pointList = geoHashUtil.decodeAll(list);
-        interactionData.setPointSet(pointList);
-        return interactionData;
+        responseData.setPointSet(pointList);
+        return responseData;
     }
 
     @Override
-    public InteractionData getLiveMap(InteractionData data) {
+    public ResponseData getLiveMap(InteractionData data) {
         // 将时间设置为从当前时间到15秒前的这个时间段
         Calendar calendar = Calendar.getInstance();
-        System.out.println(calendar);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
@@ -61,15 +56,22 @@ public class HeatMapServiceImpl implements HeatMapService {
             e.printStackTrace();
         }
         data.setEndTime(data.getCurrentTime());
-        calendar.add(Calendar.SECOND,0-15);
+        calendar.add(Calendar.SECOND, 0 - 14);
         data.setStartTime(sdf.format(calendar.getTime()));
-        System.out.println(data.getStartTime() + ":" + data.getEndTime());
-
-        // 得到该矩阵区域的某段时间内个GeoHash方块中的权值
-        /*  Map<String,Integer> points = */
-        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndBat(data);
+        List<GeoHash> list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data);
         List<Point> pointList = geoHashUtil.decodeAll(list);
-        interactionData.setPointSet(pointList);
-        return interactionData;
+        responseData.setPointSet(pointList);
+        return responseData;
+    }
+
+    /**
+     * 预测某区域，某时间段的热力图；
+     *
+     * @param data 数据中包含两个点的经纬度和请求时间点；
+     * @return 带权点集；
+     */
+    @Override
+    public ResponseData predictMap(InteractionData data) {
+        return null;
     }
 }

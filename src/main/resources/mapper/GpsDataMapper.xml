@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qg.www.dao.GpsDataDao">
-  <resultMap id="BaseResultMap" type="com.qg.www.models.GpsData">
-    <id column="ID" jdbcType="BIGINT" property="id" />
-    <result column="LICENSEPLATENO" jdbcType="VARCHAR" property="licenseplateno" />
-    <result column="GPS_TIME" jdbcType="TIMESTAMP" property="gpsTime" />
-    <result column="LONGITUDE" jdbcType="DOUBLE" property="longitude" />
-    <result column="LATITUDE" jdbcType="DOUBLE" property="latitude" />
-    <result column="SPEED" jdbcType="INTEGER" property="speed" />
-    <result column="CAR_STAT1" jdbcType="CHAR" property="carStat1" />
-    <result column="GEOHASH" jdbcType="VARCHAR" property="geohash" />
-    <result column="ROW_KEY" jdbcType="VARCHAR" property="rowKey" />
-    <result column="HOUR_REPRE" jdbcType="VARCHAR" property="hourRepre" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.qg.www.models.GpsData">
+        <id column="ID" jdbcType="BIGINT" property="id"/>
+        <result column="LICENSEPLATENO" jdbcType="VARCHAR" property="licenseplateno"/>
+        <result column="GPS_TIME" jdbcType="TIMESTAMP" property="gpsTime"/>
+        <result column="LONGITUDE" jdbcType="DOUBLE" property="longitude"/>
+        <result column="LATITUDE" jdbcType="DOUBLE" property="latitude"/>
+        <result column="SPEED" jdbcType="INTEGER" property="speed"/>
+        <result column="CAR_STAT1" jdbcType="CHAR" property="carStat1"/>
+        <result column="GEOHASH" jdbcType="VARCHAR" property="geohash"/>
+        <result column="ROW_KEY" jdbcType="VARCHAR" property="rowKey"/>
+        <result column="HOUR_REPRE" jdbcType="VARCHAR" property="hourRepre"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     ID, LICENSEPLATENO, GPS_TIME, LONGITUDE, LATITUDE, SPEED, CAR_STAT1, GEOHASH, ROW_KEY, 
     HOUR_REPRE
   </sql>
 
-  <select id="listGeoHashAndNumByTimeAndLonAndBat" resultType="com.qg.www.models.GeoHash">
+    <select id="listGeoHashAndNumByTimeAndLonAndLat" resultType="com.qg.www.models.GeoHash">
     select GEOHASH,COUNT(GEOHASH) AS weight
     FROM
     gpsdata1
@@ -27,7 +27,6 @@
     AND (LATITUDE BETWEEN  ${rightBottomLat}AND ${leftTopLat})
     GROUP BY GEOHASH;
   </select>
-
 
 
 </mapper>
