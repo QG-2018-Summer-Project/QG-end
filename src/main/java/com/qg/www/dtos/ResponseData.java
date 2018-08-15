@@ -18,11 +18,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> {
     /**
-     * 点集；
-     */
-    private List<T> pointSet;
-    /**
      * 状态码
      */
     private String status;
+    /**
+     * 点集；
+     */
+    private List<T> pointSet;
+
 }

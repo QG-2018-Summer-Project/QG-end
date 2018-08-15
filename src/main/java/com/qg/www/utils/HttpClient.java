@@ -1,6 +1,7 @@
 package com.qg.www.utils;
 
 
+import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
@@ -32,7 +33,7 @@ public class HttpClient {
      * @return
      * @throws IOException
      */
-    public InteractionData demandedCount(String url, RequestData<Feature> requestData) throws IOException {
+    public InteractBigData demandedCount(String url, RequestData<Feature> requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData);
@@ -59,7 +60,7 @@ public class HttpClient {
             if (response.getStatusLine().getStatusCode() == 200) {
                 strJson = EntityUtils.toString(entity,"UTF-8").trim();
                 // TODO 暂时使用前端交互的点集
-                InteractionData data = gson.fromJson(strJson,InteractionData.class);
+                InteractBigData data = gson.fromJson(strJson,InteractBigData.class);
                 return data;
             }
             return null;

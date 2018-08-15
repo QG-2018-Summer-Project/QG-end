@@ -21,7 +21,7 @@ public class InteractBigData {
     /**
      * 用于接收数据挖掘组返回的带权geohash列表；
      */
-    private List<GeoHash> geoHashList;
+    private List<GeoHash> pointSet;
     /**
      * 用于接收数据挖掘组返回的最优路线号；
      */

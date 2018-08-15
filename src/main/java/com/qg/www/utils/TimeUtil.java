@@ -48,6 +48,7 @@ public class TimeUtil {
 
         // 得到各自以一年算的天数
         int day1 = calendar1.get(Calendar.DAY_OF_YEAR);
+        int day2 = calendar2.get(Calendar.DAY_OF_YEAR);
         int day3 = calendar3.get(Calendar.DAY_OF_YEAR);
 
         // 得到各自所在的年份
@@ -78,7 +79,7 @@ public class TimeUtil {
             table[0] = "gpsdata" + resultTime;
         }
 
-        if (!date1.equals(date2)) {
+        if ((day2 - day1) == 1) {
             // 数据库下张表名不同
             if (resultTime >= 21) {
                 table[1] = "gpsdata_copy" + (resultTime + 1);
@@ -86,6 +87,7 @@ public class TimeUtil {
                 table[1] = "gpsdata" + (resultTime + 1);
             }
         }
+        System.out.println(table[1]);
         return table;
     }
 
