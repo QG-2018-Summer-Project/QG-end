@@ -21,7 +21,7 @@ import java.io.IOException;
 
 
 @Service
-public class HttpClient {
+public class HttpClientUtil {
 
     @Resource
     InteractBigData interactBigData;
@@ -33,7 +33,7 @@ public class HttpClient {
      * @return
      * @throws IOException
      */
-    public InteractBigData demandedCount(String url, RequestData<Feature> requestData) throws IOException {
+    public InteractBigData demandedCount(String url, RequestData requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData);
@@ -59,7 +59,6 @@ public class HttpClient {
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 strJson = EntityUtils.toString(entity,"UTF-8").trim();
-                // TODO 暂时使用前端交互的点集
                 interactBigData = gson.fromJson(strJson,InteractBigData.class);
                 return interactBigData;
             }

@@ -3,15 +3,17 @@ package com.qg.www.service.impl;
 
 import com.qg.www.dao.FeatureDao;
 import com.qg.www.dao.GpsDataDao;
+import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.dtos.ResponseData;
+import com.qg.www.enums.Url;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
 import com.qg.www.service.HeatMapService;
 import com.qg.www.utils.GeoHashUtil;
-import com.qg.www.utils.HttpClient;
+import com.qg.www.utils.HttpClientUtil;
 import com.qg.www.utils.TimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +40,11 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Resource
     TimeUtil timeUtil;
     @Resource
-    HttpClient httpClient;
+    HttpClientUtil httpClientUtil;
     @Resource
-    ResponseData responseData;
+    ResponseData<Point> responseData;
+    @Resource
+    InteractBigData bigData;
 
     /**
      * 查询某时间段的热力图
@@ -58,7 +62,7 @@ public class HeatMapServiceImpl implements HeatMapService {
 
     @Override
     public ResponseData getLiveMap(InteractionData data) {
-        // 将时间设置为从当前时间到15秒前的这个时间段
+        // 将时间设置为从当前时间到14秒前的这个时间段
         Calendar calendar = Calendar.getInstance();
         System.out.println(calendar);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -69,7 +73,7 @@ public class HeatMapServiceImpl implements HeatMapService {
             e.printStackTrace();
         }
         data.setEndTime(data.getCurrentTime());
-        calendar.add(Calendar.SECOND, -15);
+        calendar.add(Calendar.SECOND, -14);
         data.setStartTime(sdf.format(calendar.getTime()));
         System.out.println(data.getStartTime() + ":" + data.getEndTime());
 
@@ -101,12 +105,15 @@ public class HeatMapServiceImpl implements HeatMapService {
         requestData.setMonth1(month);
         requestData.setList(featureList);
         try {
-            data = httpClient.demandedCount("http://127.0.0.1:8080/qgtaxi/predict/xuqiuliang", requestData);
+            bigData = httpClientUtil.demandedCount(Url.DEMAND.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        List<GeoHash> geoHashList = bigData.getPointSet();
+        List<Point> pointList = geoHashUtil.decodeAll(geoHashList);
+        responseData.setPointSet(pointList);
+        return responseData;
     }
 
     /**
@@ -139,10 +146,13 @@ public class HeatMapServiceImpl implements HeatMapService {
 
         System.out.println(featureList.get(1).getDay1());
         try {
-            data = httpClient.demandedCount("http://127.0.0.1:8080/qgtaxi/predict/xuqiuliang", requestData);
+            bigData = httpClientUtil.demandedCount(Url.COUNT.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        List<GeoHash> geoHashList = bigData.getPointSet();
+        List<Point> pointList = geoHashUtil.decodeAll(geoHashList);
+        responseData.setPointSet(pointList);
+        return responseData;
     }
 }

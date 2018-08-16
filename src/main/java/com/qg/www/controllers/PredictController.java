@@ -1,6 +1,7 @@
 package com.qg.www.controllers;
 
 
+import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.models.Feature;
@@ -18,8 +19,8 @@ import java.util.List;
 public class PredictController {
 
     @ResponseBody
-    @RequestMapping(value = "/xuqiuliang", method = RequestMethod.POST)
-    public InteractionData xuqiuliang(@RequestBody RequestData<Feature> requestData){
+    @RequestMapping(value = "/liyonglv", method = RequestMethod.POST)
+    public InteractBigData xuqiuliang(@RequestBody RequestData<Feature> requestData){
         System.out.println("我被请求了");
         Iterator <Feature>it=requestData.getList().iterator();
         while(it.hasNext()){
@@ -29,9 +30,13 @@ public class PredictController {
         GeoHash geoHash = new GeoHash();
         geoHash.setGeohash("as");
         geoHash.setWeight(12);
+        geoHash.setWeight1(123);
+        geoHash.setWeight2(111);
+        geoHash.setWeight3(222);
         List<GeoHash> geoHashes = new ArrayList<>();
         geoHashes.add(geoHash);
-        InteractionData interactionData = new InteractionData();
-        return interactionData;
+        InteractBigData interactBigData = new InteractBigData();
+        interactBigData.setPointSet(geoHashes);
+        return interactBigData;
     }
 }

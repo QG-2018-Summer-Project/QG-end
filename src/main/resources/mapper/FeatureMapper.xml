@@ -1,37 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qg.www.dao.FeatureDao">
-  <resultMap id="BaseResultMap" type="com.qg.www.models.Feature">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="geohash" jdbcType="VARCHAR" property="geohash" />
-    <result column="lon" jdbcType="DOUBLE" property="lon" />
-    <result column="lat" jdbcType="DOUBLE" property="lat" />
-    <result column="month1" jdbcType="INTEGER" property="month1" />
-    <result column="day1" jdbcType="INTEGER" property="day1" />
-    <result column="hour1" jdbcType="INTEGER" property="hour1" />
-    <result column="dure1" jdbcType="INTEGER" property="dure1" />
-    <result column="dure2" jdbcType="INTEGER" property="dure2" />
-    <result column="dure3" jdbcType="INTEGER" property="dure3" />
-    <result column="dure4" jdbcType="INTEGER" property="dure4" />
-    <result column="dure5" jdbcType="INTEGER" property="dure5" />
-    <result column="dure6" jdbcType="INTEGER" property="dure6" />
-    <result column="dure7" jdbcType="INTEGER" property="dure7" />
-    <result column="one" jdbcType="REAL" property="one" />
-    <result column="two" jdbcType="REAL" property="two" />
-    <result column="three" jdbcType="REAL" property="three" />
-    <result column="four" jdbcType="REAL" property="four" />
-    <result column="five" jdbcType="REAL" property="five" />
-    <result column="true1" jdbcType="REAL" property="true1" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.qg.www.models.Feature">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="geohash" jdbcType="VARCHAR" property="geohash"/>
+        <result column="lon" jdbcType="DOUBLE" property="lon"/>
+        <result column="lat" jdbcType="DOUBLE" property="lat"/>
+        <result column="month1" jdbcType="INTEGER" property="month1"/>
+        <result column="day1" jdbcType="INTEGER" property="day1"/>
+        <result column="hour1" jdbcType="INTEGER" property="hour1"/>
+        <result column="dure1" jdbcType="INTEGER" property="dure1"/>
+        <result column="dure2" jdbcType="INTEGER" property="dure2"/>
+        <result column="dure3" jdbcType="INTEGER" property="dure3"/>
+        <result column="dure4" jdbcType="INTEGER" property="dure4"/>
+        <result column="dure5" jdbcType="INTEGER" property="dure5"/>
+        <result column="dure6" jdbcType="INTEGER" property="dure6"/>
+        <result column="dure7" jdbcType="INTEGER" property="dure7"/>
+        <result column="one" jdbcType="REAL" property="one"/>
+        <result column="two" jdbcType="REAL" property="two"/>
+        <result column="three" jdbcType="REAL" property="three"/>
+        <result column="four" jdbcType="REAL" property="four"/>
+        <result column="five" jdbcType="REAL" property="five"/>
+        <result column="true1" jdbcType="REAL" property="true1"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, geohash, lon, lat, month1, day1, hour1, dure1, dure2, dure3, dure4, dure5, dure6, 
     dure7, one, two, three, four, five, true1
   </sql>
 
-  <select id="listAllFeature" resultType="com.qg.www.models.Feature">
+    <select id="listAllFeature" resultType="com.qg.www.models.Feature">
     SELECT geohash, month1, day1, hour1, dure1, dure2, dure3, dure4, dure5, dure6,
     dure7, one, two, three, four, five
     FROM ${table}  WHERE  (lon BETWEEN ${data.leftTopLon} And ${data.rightBottomLon})And (lat BETWEEN ${data.rightBottomLat} AND
     ${data.leftTopLat} And hour1 =${hour})
   </select>
+
+    <select id="getAvgPercent" resultType="Double">
+    SELECT AVG(true1)
+    FROM ${table}
+    WHERE hour1 = ${hour}
+    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    AND (lat BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+  </select>
+
+    <select id="listAllRate" resultType="com.qg.www.models.Rate">
+    SELECT geohash, feature1, feature2, feature3, feature4, feature5, feature6, feature7, feature8, feature9
+    FROM ${table}
+    WHERE (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    AND (lat BETWEEN ${data.rightBottomLat} AND ${data.leftTopLat})
+    And hour1 =${hour}
+    </select>
+
+    <select id="getAvgRate" resultType="Double">
+    SELECT AVG(rate)
+    FROM rate
+    WHERE hour1 = ${hour}
+    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    AND (lat BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+    </select>
+
 </mapper>
