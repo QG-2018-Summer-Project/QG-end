@@ -8,6 +8,7 @@ import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.dtos.ResponseData;
 import com.qg.www.enums.Status;
+import com.qg.www.enums.Url;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
@@ -40,8 +41,6 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Resource
     private TimeUtil timeUtil;
     @Resource
-    private HttpClientUtil httpClient;
-    @Resource
     private ResponseData<Point> responseData;
     @Resource
     private InteractBigData bigData;
@@ -55,9 +54,9 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Override
     public ResponseData querySomeTimesMap(InteractionData data) {
         //定义第一张表名；
-        String tableOne ;
+        String tableOne;
         //定义第二张表名；
-        String tableTwo ;
+        String tableTwo;
         //定义开始时间；
         String startTime;
         //定义结束时间；
@@ -70,37 +69,37 @@ public class HeatMapServiceImpl implements HeatMapService {
         endTime = data.getEndTime();
         //如果时间不为空，则可以调用dao层进行查询；
         if (null != startTime && null != endTime) {
-            String[]tables=new String[2];
+            String[] tables = new String[2];
             try {
                 //接收数据；
-                tables=timeUtil.getGpsDateTable(startTime,endTime);
+                tables = timeUtil.getGpsDateTable(startTime, endTime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             //先判断表名；如果不是跨天查询，执行下列操作；
-            if (null!=tables[1]&&"".equals(tables[1])){
-                tableOne=tables[0];
+            if (null != tables[1] && "".equals(tables[1])) {
+                tableOne = tables[0];
                 System.out.println(tableOne);
-                list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data,tableOne,null);
+                list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data, tableOne, null);
                 //判空；
-                if (null!=list) {
+                if (null != list) {
                     pointList = geoHashUtil.decodeAll(list);
                     responseData.setPointSet(pointList);
-                }else {
+                } else {
                     //查询结果为空；
                     responseData.setPointSet(null);
                 }
                 responseData.setStatus(Status.NORMAL.getStatus());
-            }else{
+            } else {
                 //如果是跨天查询，执行分表查询；
-                tableOne=tables[0];
-                tableTwo=tables[1];
-                list=gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data,tableOne,tableTwo);
+                tableOne = tables[0];
+                tableTwo = tables[1];
+                list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data, tableOne, tableTwo);
                 //判空；
-                if (null!=list) {
+                if (!list.isEmpty()) {
                     pointList = geoHashUtil.decodeAll(list);
                     responseData.setPointSet(pointList);
-                }else {
+                } else {
                     //查询结果为空；
                     responseData.setPointSet(null);
                 }
@@ -122,9 +121,9 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Override
     public ResponseData getLiveMap(InteractionData data) {
         //定义第一张表名；
-        String tableOne ;
+        String tableOne;
         //定义第二张表名；
-        String tableTwo ;
+        String tableTwo;
         //定义当前时间变量；
         String currentTime;
         //定义geohash队列
@@ -132,7 +131,7 @@ public class HeatMapServiceImpl implements HeatMapService {
         //定义点集；
         List<Point> pointList;
         //创建表数组；
-        String []tables=new String[2];
+        String[] tables = new String[2];
         // 将时间设置为从当前时间到15秒前的这个时间段
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -155,20 +154,20 @@ public class HeatMapServiceImpl implements HeatMapService {
         data.setStartTime(sdf.format(calendar.getTime()));
         //获取表名数组；
         try {
-            tables=timeUtil.getGpsDateTable(data.getStartTime(),data.getEndTime());
+            tables = timeUtil.getGpsDateTable(data.getStartTime(), data.getEndTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         //不是跨天；
-        if("".equals(tables[1])){
-            tableOne=tables[0];
+        if ("".equals(tables[1])) {
+            tableOne = tables[0];
             //获取数据库查询数据队列；
-            list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data,tableOne,null);
-        }else {
-            tableOne=tables[0];
-            tableTwo=tables[1];
+            list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data, tableOne, null);
+        } else {
+            tableOne = tables[0];
+            tableTwo = tables[1];
             //获取数据库查询数据队列；
-            list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data,tableOne,tableTwo);
+            list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data, tableOne, tableTwo);
         }
 
         //查询成功,且数据不为空；
@@ -176,13 +175,19 @@ public class HeatMapServiceImpl implements HeatMapService {
             pointList = geoHashUtil.decodeAll(list);
             responseData.setPointSet(pointList);
             responseData.setStatus(Status.NORMAL.getStatus());
-        }else {
+        } else {
             //查询成功，但是数据为空；
             responseData.setStatus(Status.NORMAL.getStatus());
         }
         return responseData;
     }
 
+    /**
+     * 获取汽车需求量热力图；
+     *
+     * @param data 数据中包含两个点的经纬度和当前的请求时间
+     * @return 带权点集
+     */
     @Override
     public ResponseData getDemandMap(InteractionData data) {
         String table = "";
@@ -192,16 +197,29 @@ public class HeatMapServiceImpl implements HeatMapService {
         Integer day;
         //定义小时变量；
         Integer hour;
-        try {
-            // 得到应该查询的数据表名；
-            table = timeUtil.getDemandTable(data.getPredictedTime(), "need");
-        } catch (ParseException e) {
-            e.printStackTrace();
+        //定义预测时间变量；
+        String predictTime;
+        //定义geohash区域块队列；
+        List<GeoHash> geoHashList;
+        //定义点集；
+        List<Point> pointList;
+        predictTime = data.getPredictedTime();
+        if (null != predictTime && predictTime.length() >= 14) {
+            try {
+                // 得到应该查询的数据表名；
+                table = timeUtil.getDemandTable(predictTime, "need");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // 截取预测时间的日期天数和时间
+            month = Integer.parseInt(predictTime.substring(5, 7));
+            day = Integer.parseInt(predictTime.substring(8, 10));
+            hour = Integer.parseInt(predictTime.substring(11, 13));
+        } else {
+            //前端传递的信息错误时，返回状态码；
+            responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
+            return responseData;
         }
-        // 截取预测时间的日期天数和时间
-        month = Integer.parseInt(data.getPredictedTime().substring(5, 7));
-        day = Integer.parseInt(data.getPredictedTime().substring(8, 10));
-        hour = Integer.parseInt(data.getPredictedTime().substring(11, 13));
         // 得到表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
         // 将各参数放入交互model中
@@ -210,14 +228,21 @@ public class HeatMapServiceImpl implements HeatMapService {
         requestData.setHour1(hour);
         requestData.setMonth1(month);
         requestData.setList(featureList);
+        //向数据挖掘组请求数据；
         try {
-            bigData = httpClient.demandedCount("http://192.168.1.110:5000/qgtaxi/predict/xuqiuliang", requestData);
+            bigData = HttpClientUtil.demandedCount(Url.DEMAND.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<GeoHash> geoHashList = bigData.getPointSet();
-        List<Point> pointList = geoHashUtil.decodeAll(geoHashList);
-        responseData.setPointSet(pointList);
+        geoHashList = bigData.getPointSet();
+        if (!geoHashList.isEmpty()) {
+            pointList = geoHashUtil.decodeAll(geoHashList);
+            responseData.setPointSet(pointList);
+            responseData.setStatus(Status.NORMAL.getStatus());
+        } else {
+            //预测数据缺失；
+            responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+        }
         return responseData;
     }
 
@@ -230,16 +255,37 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Override
     public ResponseData getPredictCarMap(InteractionData data) {
         String table = "";
-        try {
-            // 得到应该查询的数据表
-            table = timeUtil.getDemandTable(data.getPredictedTime(), "data");
-        } catch (ParseException e) {
-            e.printStackTrace();
+        //定义月份；
+        Integer month;
+        //定义日变量；
+        Integer day;
+        //定义小时变量；
+        Integer hour;
+        //定义预测时间变量；
+        String predictTime;
+        //定义geohash区域块队列；
+        List<GeoHash> geoHashList;
+        //定义点集；
+        List<Point> pointList;
+        //获取预测时间；
+        predictTime=data.getPredictedTime();
+        //对预测时间进行判断；
+        if (null != predictTime && predictTime.length() >= 14){
+            try {
+                // 得到应该查询的数据表
+                table = timeUtil.getDemandTable(data.getPredictedTime(), "data");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // 截取预测时间的日期天数和时间
+            month = Integer.parseInt(data.getPredictedTime().substring(5, 7));
+            day = Integer.parseInt(data.getPredictedTime().substring(8, 10));
+            hour = Integer.parseInt(data.getPredictedTime().substring(11, 13));
+        }else {
+            //前端传送错误信息，直接返回；
+            responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
+            return responseData;
         }
-        // 截取预测时间的日期天数和时间
-        Integer month = Integer.parseInt(data.getPredictedTime().substring(5, 7));
-        Integer day = Integer.parseInt(data.getPredictedTime().substring(8, 10));
-        Integer hour = Integer.parseInt(data.getPredictedTime().substring(11, 13));
         // 得到特征表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
         // 将各参数放入交互model中
@@ -249,13 +295,20 @@ public class HeatMapServiceImpl implements HeatMapService {
         requestData.setMonth1(month);
         requestData.setList(featureList);
         try {
-            bigData = httpClient.demandedCount("http://192.168.1.110:5000/qgtaxi/predict/count", requestData);
+            bigData = HttpClientUtil.demandedCount(Url.COUNT.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<GeoHash> geoHashList = bigData.getPointSet();
-        List<Point> pointList = geoHashUtil.decodeAll(geoHashList);
-        responseData.setPointSet(pointList);
+        geoHashList = bigData.getPointSet();
+        if (!geoHashList.isEmpty()){
+            pointList = geoHashUtil.decodeAll(geoHashList);
+            responseData.setPointSet(pointList);
+            responseData.setStatus(Status.NORMAL.getStatus());
+        }else {
+            //数据挖掘预测失败；
+            responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+            responseData.setPointSet(null);
+        }
         return responseData;
     }
 }

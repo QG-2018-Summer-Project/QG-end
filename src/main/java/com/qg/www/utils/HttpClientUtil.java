@@ -24,22 +24,23 @@ import java.io.IOException;
 public class HttpClientUtil {
 
     @Resource
-    InteractBigData interactBigData;
+    private static InteractBigData interactBigData;
 
     /**
      * 与数据挖掘端交互数据
-     * @param url 发送的URL
+     *
+     * @param url         发送的URL
      * @param requestData 传给数据
      * @return
      * @throws IOException
      */
-    public InteractBigData demandedCount(String url, RequestData requestData) throws IOException {
+    public static InteractBigData demandedCount(String url, RequestData requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData);
         //使用帮助类HttpClients创建CloseableHttpClient对象.
         CloseableHttpClient client = HttpClients.createDefault();
-        //HTTP请求类型创建HttphttpPost实例
+        //HTTP请求类型创建HttpPost实例
         HttpPost httpPost = new HttpPost(url);
 
         httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
@@ -48,7 +49,7 @@ public class HttpClientUtil {
         StringEntity se = new StringEntity(strJson);
         se.setContentType("application/json");
 
-        //对于httpPost请求,把请求体填充进HttphttpPost实体.
+        //对于httpPost请求,把请求体填充进HttpPost实体.
         httpPost.setEntity(se);
 
         CloseableHttpResponse response = null;
@@ -58,8 +59,8 @@ public class HttpClientUtil {
             HttpEntity entity = response.getEntity();
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
-                strJson = EntityUtils.toString(entity,"UTF-8").trim();
-                interactBigData = gson.fromJson(strJson,InteractBigData.class);
+                strJson = EntityUtils.toString(entity, "UTF-8").trim();
+                interactBigData = gson.fromJson(strJson, InteractBigData.class);
                 return interactBigData;
             }
             return null;

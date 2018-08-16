@@ -70,7 +70,7 @@ public class ChartServiceImpl implements ChartService {
         requestData.setList(featureList);
         // 得到数据挖掘端传来的数据
         try {
-            bigData = httpClientUtil.demandedCount(Url.CHANGE_PERCENT.getUrl(), requestData);
+            bigData = HttpClientUtil.demandedCount(Url.CHANGE_PERCENT.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,7 +151,7 @@ public class ChartServiceImpl implements ChartService {
         requestData.setList(rateList);
         // 得到数据挖掘端传来的数据
         try {
-            bigData = httpClientUtil.demandedCount(Url.UTILIZE_PERCENT.getUrl(), requestData);
+            bigData = HttpClientUtil.demandedCount(Url.UTILIZE_PERCENT.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
