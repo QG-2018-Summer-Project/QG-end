@@ -2,6 +2,7 @@ package com.qg.www.utils;
 
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
+import org.junit.Test;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -145,5 +146,10 @@ public class GeoHashUtil {
         return pointList;
     }
 
+    @Test
+    public void encodeAll(){
+        System.out.println(encode(23.135833740234375, 113.30886840820312).substring(0,7));
+        System.out.println(decode("ws0ed7v")[0] + ":" + decode("ws0ed7v")[1]);
+    }
 
 }

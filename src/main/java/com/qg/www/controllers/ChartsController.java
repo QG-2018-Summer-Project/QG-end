@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * @author net
+ * @version 1.0
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/charts")

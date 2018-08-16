@@ -26,21 +26,19 @@ import java.util.List;
 @Service("chartService")
 public class ChartServiceImpl implements ChartService {
     @Resource
-    TimeUtil timeUtil;
+    private TimeUtil timeUtil;
     @Resource
-    FeatureDao featureDao;
+    private FeatureDao featureDao;
     @Resource
-    InteractBigData bigData;
+    private InteractBigData bigData;
     @Resource
-    HttpClientUtil httpClientUtil;
+    private HttpClientUtil httpClientUtil;
     @Resource
-    GeoHashUtil geoHashUtil;
+    private ResponseData responseData;
     @Resource
-    ResponseData responseData;
+    private List<Point> pointList;
     @Resource
-    List<Point> pointList;
-    @Resource
-    List<GeoHash> geoHashList;
+    private List<GeoHash> geoHashList;
 
 
     /**

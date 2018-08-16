@@ -13,7 +13,7 @@ import com.qg.www.models.GeoHash;
 import com.qg.www.models.Point;
 import com.qg.www.service.HeatMapService;
 import com.qg.www.utils.GeoHashUtil;
-import com.qg.www.utils.HttpClient;
+import com.qg.www.utils.HttpClientUtil;
 import com.qg.www.utils.TimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class HeatMapServiceImpl implements HeatMapService {
     @Resource
     private TimeUtil timeUtil;
     @Resource
-    private HttpClient httpClient;
+    private HttpClientUtil httpClient;
     @Resource
     private ResponseData<Point> responseData;
     @Resource
