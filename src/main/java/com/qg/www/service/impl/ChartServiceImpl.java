@@ -21,26 +21,21 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 @Service("chartService")
 public class ChartServiceImpl implements ChartService {
     @Resource
-    TimeUtil timeUtil;
+    private TimeUtil timeUtil;
     @Resource
-    FeatureDao featureDao;
+    private FeatureDao featureDao;
     @Resource
-    InteractBigData bigData;
+    private InteractBigData bigData;
     @Resource
-    HttpClientUtil httpClientUtil;
+    private ResponseData responseData;
     @Resource
-    GeoHashUtil geoHashUtil;
-    @Resource
-    ResponseData responseData;
-    @Resource
-    List<Point> pointList;
-    @Resource
-    List<GeoHash> geoHashList;
+    private List<GeoHash> geoHashList;
 
 
     /**
@@ -64,7 +59,6 @@ public class ChartServiceImpl implements ChartService {
         Integer hour = Integer.parseInt(data.getCurrentTime().substring(11, 13));
         // 得到表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
-        System.out.println(featureList.get(10).getGeohash());
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
         requestData.setDay1(day);
@@ -77,8 +71,9 @@ public class ChartServiceImpl implements ChartService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        geoHashList = bigData.getPointSet();
+        if (null!=bigData){
+            geoHashList = bigData.getPointSet();
+        }
         Double[] percents = new Double[6];
 
         if (hour < 3) {
@@ -159,8 +154,9 @@ public class ChartServiceImpl implements ChartService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        geoHashList = bigData.getPointSet();
+        if (null!=bigData){
+            geoHashList = bigData.getPointSet();
+        }
         Double[] percents = new Double[6];
 
         if (hour < 3) {
@@ -202,8 +198,8 @@ public class ChartServiceImpl implements ChartService {
         double weight2 = 0;
         double weight3 = 0;
         for (GeoHash geoHash : geoHashList) {
-            weight1 += geoHash.getWeight1();
             weight2 += geoHash.getWeight2();
+            weight1 += geoHash.getWeight1();
             weight3 += geoHash.getWeight3();
             i++;
         }
