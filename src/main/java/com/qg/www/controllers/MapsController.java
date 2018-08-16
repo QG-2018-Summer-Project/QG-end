@@ -20,44 +20,48 @@ public class MapsController {
 
     @Resource
     HeatMapServiceImpl heatMapService;
+
     /**
-     *获取实况热力图；
+     * 获取实况热力图；
+     *
      * @param interactionData 数据中包含两个点的经纬度和当前的请求时间；
      * @return json格式的带权点集；
      */
     @PostMapping("/liveheatmap")
-    public ResponseData getLiveMap(@RequestBody  InteractionData interactionData){
+    public ResponseData getLiveMap(@RequestBody InteractionData interactionData) {
         return heatMapService.getLiveMap(interactionData);
     }
 
     /**
      * 查询某段时间的热力图；
+     *
      * @param data 数据中包含两个点的经纬度和请求的时间段；
      * @return json格式的带权点集；
      */
     @PostMapping("/querymap")
-    public ResponseData querySomeTimesMap(@RequestBody InteractionData data){
+    public ResponseData querySomeTimesMap(@RequestBody InteractionData data) {
         return heatMapService.querySomeTimesMap(data);
     }
 
     /**
      * 获取汽车需求量的热力图；
+     *
      * @param data 数据中包含两个点的经纬度和请求的时间段；
      * @return json格式的带权点集；
      */
     @PostMapping("/demanded")
-    public ResponseData getDemandedMap(@RequestBody InteractionData data){
+    public ResponseData getDemandedMap(@RequestBody InteractionData data) {
         return heatMapService.getDemandMap(data);
     }
 
     /**
-     *预测汽车数量热力图；
+     * 预测汽车数量热力图；
+     *
      * @param data 数据中包含两个点的经纬度和请求的时间段；
      * @return json格式的带权点集；
      */
     @PostMapping("/count")
-    public ResponseData getPredictCarMap(@RequestBody InteractionData data){
-
+    public ResponseData getPredictCarMap(@RequestBody InteractionData data) {
         return heatMapService.getPredictCarMap(data);
     }
 }
