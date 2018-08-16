@@ -10,27 +10,19 @@ import java.util.List;
 /**
  * @author net
  * @version 1.0
- * 数据包装类；
+ * 向数据挖掘组发送请求时的数据；
  */
 @Getter
 @Setter
-@Service("dataPack")
+@Service("requestData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestData<T> {
-    /**
-     *  预测的月份
-     */
-    private Integer month;
 
-    /**
-     * 预测的时间段，用0-23中的一个数字；
-     */
-    private Integer hour;
+    private Integer month1;
 
-    /**
-     * 预测的天数
-     */
-    private Integer day;
+    private Integer hour1;
+
+    private Integer day1;
     /**
      * 数据列表；
      */

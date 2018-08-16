@@ -1,4 +1,3 @@
-/*
 package com.qg.www.utils;
 
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -12,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class test {
+public class MyBatisBuilder {
     public static void main(String[] args) {
         shell();
     }
@@ -41,4 +40,3 @@ public class test {
         }
     }
 }
-*/

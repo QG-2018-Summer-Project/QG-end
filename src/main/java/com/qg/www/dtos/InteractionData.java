@@ -19,10 +19,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InteractionData {
     /**
-     * 状态码
-     */
-    private String status;
-    /**
      * 左上角经度
      */
     private Double leftTopLon;

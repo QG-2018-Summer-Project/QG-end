@@ -1,17 +1,15 @@
 package com.qg.www.controllers;
 
 
-import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
-import com.qg.www.models.Point;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -22,7 +20,12 @@ public class PredictController {
     @ResponseBody
     @RequestMapping(value = "/xuqiuliang", method = RequestMethod.POST)
     public InteractionData xuqiuliang(@RequestBody RequestData<Feature> requestData){
-        System.out.println(requestData.getDay());
+        System.out.println("我被请求了");
+        Iterator <Feature>it=requestData.getList().iterator();
+        while(it.hasNext()){
+            Feature feature=it.next();
+            System.out.println(feature.getGeohash()+feature.getLat()+feature.getHour1());
+        }
         GeoHash geoHash = new GeoHash();
         geoHash.setGeohash("as");
         geoHash.setWeight(12);

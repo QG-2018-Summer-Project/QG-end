@@ -1,7 +1,9 @@
 package com.qg.www.utils;
 
 
+import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.RequestData;
+import com.qg.www.dtos.ResponseData;
 import com.qg.www.models.Feature;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
@@ -15,17 +17,15 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.ws.Response;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 
 @Service
 public class HttpClient {
 
     @Resource
-    ResponseDate responseDate;
+    InteractBigData interactBigData;
+
     /**
      * 与数据挖掘端交互数据
      * @param url 发送的URL
@@ -33,7 +33,7 @@ public class HttpClient {
      * @return
      * @throws IOException
      */
-    public ResponseDate demandedCount(String url, RequestData<Feature> requestData) throws IOException {
+    public InteractBigData demandedCount(String url, RequestData<Feature> requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData);
@@ -60,8 +60,8 @@ public class HttpClient {
             if (response.getStatusLine().getStatusCode() == 200) {
                 strJson = EntityUtils.toString(entity,"UTF-8").trim();
                 // TODO 暂时使用前端交互的点集
-                responseDate = gson.fromJson(strJson,ResponseDate.class);
-                return responseDate;
+                interactBigData = gson.fromJson(strJson,InteractBigData.class);
+                return interactBigData;
             }
             return null;
         } finally {
