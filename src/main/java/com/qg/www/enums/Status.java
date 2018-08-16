@@ -1,9 +1,10 @@
 package com.qg.www.enums;
 
 /**
+ * 响应状态码；
+ *
  * @author net
  * @version 1.0
- * 响应状态码；
  */
 public enum Status {
     /**

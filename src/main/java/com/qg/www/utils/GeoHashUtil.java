@@ -13,19 +13,29 @@ public class GeoHashUtil {
     @Resource
     GeoHash geoHash;
 
-    private static int numbits = 6 * 5; //经纬度单独编码长度  
-    //32位编码对应字符
+    /**
+     * 经纬度单独编码长度
+     */
+    private static int numbits = 6 * 5;
+
+    /**
+     * 32位编码对应字符
+     */
     final static char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
             '9', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p',
             'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    //定义编码映射关系  
+
+    /**
+     * 定义编码映射关系
+     */
     final static HashMap<Character, Integer> lookup = new HashMap<Character, Integer>();
 
     //初始化编码映射内容
     static {
         int i = 0;
-        for (char c : digits)
+        for (char c : digits) {
             lookup.put(c, i++);
+        }
     }
 
     //对编码后的字符串解码
@@ -44,8 +54,9 @@ public class GeoHashUtil {
         int j = 0;
         for (int i = 0; i < numbits * 2; i += 2) {
             boolean isSet = false;
-            if (i < buffer.length())
+            if (i < buffer.length()) {
                 isSet = buffer.charAt(i) == '1';
+            }
             lonset.set(j++, isSet);
         }
 
@@ -53,8 +64,9 @@ public class GeoHashUtil {
         j = 0;
         for (int i = 1; i < numbits * 2; i += 2) {
             boolean isSet = false;
-            if (i < buffer.length())
+            if (i < buffer.length()) {
                 isSet = buffer.charAt(i) == '1';
+            }
             latset.set(j++, isSet);
         }
 
@@ -64,20 +76,34 @@ public class GeoHashUtil {
         return new double[]{lat, lon};
     }
 
-    //根据二进制和范围解码
+    /**
+     * 根据二进制和范围解码
+     *
+     * @param bs      存放boolean值
+     * @param floor   左区间
+     * @param ceiling 右区间
+     * @return
+     */
     private double decode(BitSet bs, double floor, double ceiling) {
         double mid = 0;
         for (int i = 0; i < bs.length(); i++) {
             mid = (floor + ceiling) / 2;
-            if (bs.get(i))
+            if (bs.get(i)) {
                 floor = mid;
-            else
+            } else {
                 ceiling = mid;
+            }
         }
         return mid;
     }
 
-    //对经纬度进行编码
+    /**
+     * 对经纬度进行编码
+     *
+     * @param lat 纬度
+     * @param lon 经度
+     * @return
+     */
     public String encode(double lat, double lon) {
         BitSet latbits = getBits(lat, -90, 90);
         BitSet lonbits = getBits(lon, -180, 180);
@@ -89,7 +115,14 @@ public class GeoHashUtil {
         return base32(Long.parseLong(buffer.toString(), 2));
     }
 
-    //根据经纬度和范围，获取对应二进制
+    /**
+     * 根据经纬度和范围，获取对应二进制
+     *
+     * @param lat     经度或纬度
+     * @param floor   左区间
+     * @param ceiling 右区间
+     * @return 对应的二进制
+     */
     private BitSet getBits(double lat, double floor, double ceiling) {
         BitSet buffer = new BitSet(numbits);
         for (int i = 0; i < numbits; i++) {
@@ -104,21 +137,28 @@ public class GeoHashUtil {
         return buffer;
     }
 
-    //将经纬度合并后的二进制进行指定的32位编码
+    /**
+     * 将经纬度合并后的二进制进行指定的32位编码
+     *
+     * @param i 二进制
+     * @return 指定的32位编码
+     */
     private String base32(long i) {
         char[] buf = new char[65];
         int charPos = 64;
         boolean negative = (i < 0);
-        if (!negative)
+        if (!negative) {
             i = -i;
+        }
         while (i <= -32) {
             buf[charPos--] = digits[(int) (-(i % 32))];
             i /= 32;
         }
         buf[charPos] = digits[(int) (-i)];
 
-        if (negative)
+        if (negative) {
             buf[--charPos] = '-';
+        }
         return new String(buf, charPos, (65 - charPos));
     }
 
@@ -147,8 +187,8 @@ public class GeoHashUtil {
     }
 
     @Test
-    public void encodeAll(){
-        System.out.println(encode(23.135833740234375, 113.30886840820312).substring(0,7));
+    public void encodeAll() {
+        System.out.println(encode(23.135833740234375, 113.30886840820312).substring(0, 7));
         System.out.println(decode("ws0ed7v")[0] + ":" + decode("ws0ed7v")[1]);
     }
 

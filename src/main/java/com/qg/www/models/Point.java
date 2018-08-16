@@ -1,5 +1,6 @@
 package com.qg.www.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Getter
 @Service("point")
 @Scope("prototype")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Point {
     /**
      * 经度；

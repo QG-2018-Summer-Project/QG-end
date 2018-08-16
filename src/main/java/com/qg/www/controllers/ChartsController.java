@@ -17,15 +17,26 @@ import javax.annotation.Resource;
 public class ChartsController {
 
     @Resource
-    ChartService chartService;
+    private ChartService chartService;
 
+    /**
+     * 得到未来某地区的出租车数量
+     *
+     * @param data 经纬度范围和当前时间
+     * @return 当前时间前后共6个时间段的出租车数量变化率
+     */
     @PostMapping("/changepercent")
-    public ResponseData getChangePercent(@RequestBody InteractionData data){
+    public ResponseData getChangePercent(@RequestBody InteractionData data) {
         return chartService.getChangePercent(data);
     }
 
+    /**
+     * 得到未来某地区的出租车利用率
+     * @param data 经纬度范围和当前时间
+     * @return 当前时间前后共6个时间段的出租车利用率
+     */
     @PostMapping("/utilizepercent")
-    public ResponseData getUtilizePercent(@RequestBody InteractionData data){
+    public ResponseData getUtilizePercent(@RequestBody InteractionData data) {
         return chartService.getUtilizePercent(data);
     }
 

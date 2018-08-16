@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 public class MapsController {
 
     @Resource
-    HeatMapServiceImpl heatMapService;
+    private HeatMapServiceImpl heatMapService;
 
     /**
      * 获取实况热力图；

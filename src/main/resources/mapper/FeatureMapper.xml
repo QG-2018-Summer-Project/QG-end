@@ -46,14 +46,14 @@
     <select id="listAllRate" resultType="com.qg.www.models.Rate">
     SELECT geohash, feature1, feature2, feature3, feature4, feature5, feature6, feature7, feature8, feature9
     FROM ${table}
-    WHERE (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    WHERE hour1 =${hour}
+    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
     AND (lat BETWEEN ${data.rightBottomLat} AND ${data.leftTopLat})
-    And hour1 =${hour}
     </select>
 
     <select id="getAvgRate" resultType="Double">
     SELECT AVG(rate)
-    FROM rate
+    FROM ${table}
     WHERE hour1 = ${hour}
     AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
     AND (lat BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
