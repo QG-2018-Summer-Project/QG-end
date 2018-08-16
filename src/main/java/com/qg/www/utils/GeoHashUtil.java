@@ -11,7 +11,7 @@ import java.util.*;
 @Service("geoHashUtil")
 public class GeoHashUtil {
     @Resource
-    GeoHash geoHash;
+    private GeoHash geoHash;
 
     private static int numbits = 6 * 5; //经纬度单独编码长度  
     //32位编码对应字符

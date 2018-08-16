@@ -21,7 +21,6 @@ public class PredictController {
     @ResponseBody
     @RequestMapping(value = "/liyonglv", method = RequestMethod.POST)
     public InteractBigData xuqiuliang(@RequestBody RequestData<Feature> requestData){
-        System.out.println("我被请求了");
         Iterator <Feature>it=requestData.getList().iterator();
         while(it.hasNext()){
             Feature feature=it.next();

@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 public class ChartsController {
 
     @Resource
-    ChartService chartService;
+    private ChartService chartService;
 
     @PostMapping("/changepercent")
     public ResponseData getChangePercent(@RequestBody InteractionData data){
