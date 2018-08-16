@@ -10,13 +10,13 @@ public interface ChartService {
      * @param data 经纬度范围和预测时间
      * @return 6段变化率
      */
-    public ResponseData getChangePercent(@RequestBody InteractionData data);
+    ResponseData getChangePercent(@RequestBody InteractionData data);
 
     /**
      * 得到过去和未来车辆的利用率
      * @param data 经纬度范围和预测时间
      * @return 6段变化率
      */
-    public ResponseData getUtilizePercent(@RequestBody InteractionData data);
+    ResponseData getUtilizePercent(@RequestBody InteractionData data);
 
 }

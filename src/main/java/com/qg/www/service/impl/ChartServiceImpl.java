@@ -64,6 +64,7 @@ public class ChartServiceImpl implements ChartService {
         Integer hour = Integer.parseInt(data.getCurrentTime().substring(11, 13));
         // 得到表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
+        System.out.println(featureList.get(10).getGeohash());
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
         requestData.setDay1(day);
@@ -145,6 +146,7 @@ public class ChartServiceImpl implements ChartService {
         Integer hour = Integer.parseInt(data.getCurrentTime().substring(11, 13));
         // 得到表中的所有信息
         List<Rate> rateList = featureDao.listAllRate("rate", data, hour);
+        System.out.println(rateList.get(10).getGeohash());
         // 将各参数放入交互model中
         RequestData<Rate> requestData = new RequestData<>();
         requestData.setDay1(day);

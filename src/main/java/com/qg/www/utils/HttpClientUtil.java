@@ -14,16 +14,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 
 
-@Service
+@Service("httpClientUtil")
 public class HttpClientUtil {
 
-    @Resource
+    @Autowired
     private static InteractBigData interactBigData;
 
     /**
