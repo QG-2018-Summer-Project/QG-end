@@ -14,17 +14,18 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Service("responseDate")
+@Service("responseData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> {
-    /**
-     * 点集；
-     */
-    private List<T> pointSet;
     /**
      * 状态码
      */
     private String status;
+    /**
+     * 点集；
+     */
+    private List<T> pointSet;
+
     /**
      * 百分比数组 0.99形式
      */

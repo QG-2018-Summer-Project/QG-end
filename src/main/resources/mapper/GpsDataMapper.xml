@@ -19,13 +19,29 @@
   </sql>
 
     <select id="listGeoHashAndNumByTimeAndLonAndLat" resultType="com.qg.www.models.GeoHash">
-    select GEOHASH,COUNT(GEOHASH) AS weight
-    FROM
-    gpsdata1
-    WHERE (GPS_TIME BETWEEN '${startTime}' AND '${endTime}')
-    AND (LONGITUDE BETWEEN ${leftTopLon} AND ${rightBottomLon})
-    AND (LATITUDE BETWEEN  ${rightBottomLat}AND ${leftTopLat})
-    GROUP BY GEOHASH;
+        <!-- 单表查询-->
+    <if test="tableTwo==null">
+        select GEOHASH,COUNT(GEOHASH) AS weight
+        FROM
+        ${tableOne}
+        WHERE (GPS_TIME BETWEEN '${data.startTime}' AND '${data.endTime}')
+        AND (LONGITUDE BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+        AND (LATITUDE BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+        GROUP BY GEOHASH;
+    </if>
+    <if test="tableTwo!=null">
+        select newT.GEOHASH,SUM(newT.weight)as weight from (select GEOHASH,COUNT(GEOHASH) AS weight
+        FROM ${tableOne}  WHERE (GPS_TIME &gt;= '${data.startTime}')
+        AND (LONGITUDE BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+        AND (LATITUDE BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+        GROUP BY GEOHASH
+        UNION ALL select GEOHASH,COUNT(GEOHASH) AS weight
+        FROM ${tableTwo}  WHERE (GPS_TIME &lt;= '${data.endTime}')
+        AND (LONGITUDE BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+        AND (LATITUDE BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+         GROUP BY GEOHASH) as newT GROUP BY newT.GEOHASH;
+    </if>
+
   </select>
 
 

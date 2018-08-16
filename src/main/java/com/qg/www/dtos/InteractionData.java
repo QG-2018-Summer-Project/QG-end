@@ -2,6 +2,7 @@ package com.qg.www.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.qg.www.models.Point;
+import com.qg.www.models.Routes;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ import java.util.List;
 @Service("interactionData")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InteractionData {
+    /**
+     * 路线集合；
+     */
+    private List<Routes> routes;
     /**
      * 左上角经度
      */

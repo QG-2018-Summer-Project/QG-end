@@ -57,6 +57,7 @@ public class MapsController {
      */
     @PostMapping("/count")
     public ResponseData getPredictCarMap(@RequestBody InteractionData data){
+
         return heatMapService.getPredictCarMap(data);
     }
 }
