@@ -21,7 +21,7 @@ public interface FeatureDao {
     List<Feature> listAllFeature(@Param("table") String table, @Param("data") InteractionData data,@Param("hour")Integer hour);
 
     /**
-     * 查询过去出租车利用率平均值
+     * 查询过去出租车变化率平均值
      * @param data 经纬度范围
      * @param table 使用的表
      * @param hour 查询的时间段
@@ -29,7 +29,21 @@ public interface FeatureDao {
      */
     Double getAvgPercent(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
 
+    /**
+     * 查询rate表中所有特征值
+     * @param data 经纬度范围
+     * @param table 使用的表
+     * @param hour 查询的时间段
+     * @return 特征列表
+     */
     List<Rate> listAllRate(@Param("table") String table, @Param("data") InteractionData data,@Param("hour")Integer hour);
 
-    Double getAvgRate(@Param("data") InteractionData data,@Param("month") Integer month, @Param("day") Integer day, @Param("hour") Integer hour);
+    /**
+     * 查询过去出租车的利用率平均值
+     * @param data 经纬度范围
+     * @param table 使用的表
+     * @param hour 查询的时间段
+     * @return
+     */
+    Double getAvgRate(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
 }

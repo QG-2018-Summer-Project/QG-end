@@ -1,9 +1,12 @@
 package com.qg.www.enums;
 
 /**
- * 存放与数据挖掘端交互的URL
+ * 存放与数据挖掘端交互的URL\
+ *
+ * @author net
+ * @version 1.3
  */
-public enum  Url {
+public enum Url {
     /**
      * 请求未来出租车需求量
      */
@@ -15,14 +18,18 @@ public enum  Url {
     COUNT("http://127.0.0.1:8080/qgtaxi/predict/count"),
 
     /**
-     * 请求地区流量变化率
+     * 请求地区的未来一、二、三小时流量变化率
      */
     CHANGE_PERCENT("http://127.0.0.1:8080/qgtaxi/predict/percent"),
 
+    /**
+     * 请求地区的未来一、二、三小时出租车利用率
+     */
     UTILIZE_PERCENT("http://127.0.0.1:8080/qgtaxi/predict/liyonglv");
 
     private String url;
-    Url(String url){
+
+    Url(String url) {
         this.url = url;
     }
 

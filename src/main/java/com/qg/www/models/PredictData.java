@@ -1,5 +1,6 @@
 package com.qg.www.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Setter
 @Getter
 @Service("predictData")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PredictData {
     /**
      * geohash值
