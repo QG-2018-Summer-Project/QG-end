@@ -14,7 +14,7 @@ import java.util.List;
 public interface FeatureDao {
     /**
      * 查询所有特征值；
-     *
+     * @param hour
      * @param table 动态表名
      * @return 特征列表
      */

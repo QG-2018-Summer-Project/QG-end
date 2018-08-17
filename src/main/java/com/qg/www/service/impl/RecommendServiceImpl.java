@@ -5,6 +5,7 @@ import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.dtos.ResponseData;
 import com.qg.www.enums.Status;
+import com.qg.www.enums.Url;
 import com.qg.www.models.RoutePoint;
 import com.qg.www.models.Routes;
 import com.qg.www.models.Steps;
@@ -42,6 +43,7 @@ public class RecommendServiceImpl implements RecommendService {
      */
     @Override
     public ResponseData getBestWay(InteractionData data) {
+        System.out.println("路径推荐请求！");
         //定义路线列表；
         List<Routes> routesList = data.getRoutes();
         //定义步骤列表；
@@ -81,14 +83,15 @@ public class RecommendServiceImpl implements RecommendService {
 
                 }
             }
+            requestData.setList(routesList);
             //向数据挖掘组发送请求获取数据；
             try {
-                bigData = HttpClientUtil.demandedCount("", requestData);
+                bigData = HttpClientUtil.demandedCount(Url.ROUTE_RECOMMEND.getUrl(), requestData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //如果数据挖掘给的返回的路线索引不为0，则正常响应给前端；
-            if (bigData.getIndex()!=0){
+            if (null!=bigData&&bigData.getIndex()!=0){
                 responseData.setIndex(bigData.getIndex());
                 responseData.setStatus(Status.NORMAL.getStatus());
             }else {
