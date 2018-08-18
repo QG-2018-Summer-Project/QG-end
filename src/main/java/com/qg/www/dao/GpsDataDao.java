@@ -1,8 +1,13 @@
 package com.qg.www.dao;
 
+import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
 import com.qg.www.dtos.InteractionData;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -21,5 +26,11 @@ public interface GpsDataDao {
      */
     List<GeoHash> listGeoHashAndNumByTimeAndLonAndLat(@Param("data") InteractionData data, @Param("tableOne") String tableOne, @Param("tableTwo")String tableTwo);
 
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    @Select("SELECT * FROM tezheng_percent WHERE day1 = 8")
+    List<Feature> listAllFeature();
 
+    @Insert("insert into percent8 (lon,lat,geohash,month1,day1,hour1,dure1,dure2,dure3,dure4,dure5,dure6,dure7,one,two,three,four,five,true1)Values(" +
+            "#{lon},#{lat},#{geohash},#{month1},#{day1},#{hour1},#{dure1},#{dure2},#{dure3},#{dure4},#{dure5},#{dure6},#{dure7},#{one},#{two},#{three},#{four},#{five},#{true1})")
+    int addFeature(Feature feature);
 }

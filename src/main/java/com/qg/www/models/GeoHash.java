@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class GeoHash {
     private String geohash;
     private Integer weight;
-    private Integer weight1;
-    private Integer weight2;
-    private Integer weight3;
+    private Float weight1;
+    private Float weight2;
+    private Float weight3;
 }

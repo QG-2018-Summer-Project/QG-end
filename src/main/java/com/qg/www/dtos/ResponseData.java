@@ -29,7 +29,7 @@ public class ResponseData<T> {
     /**
      * 百分比数组 0.99形式
      */
-    private Double[] percents;
+    private Float[] percents;
     /**
      * 最优路径索引；
      */

@@ -32,31 +32,31 @@
     SELECT geohash, month1, day1, hour1, dure1, dure2, dure3, dure4, dure5, dure6,
     dure7, one, two, three, four, five
     FROM ${table}  WHERE  (lon BETWEEN ${data.leftTopLon} And ${data.rightBottomLon})And (lat BETWEEN ${data.rightBottomLat} AND
-    ${data.leftTopLat} And hour1 =${hour})
+    ${data.leftTopLat} And hour1 =${hour});
   </select>
 
-    <select id="getAvgPercent" resultType="Double">
+    <select id="getAvgPercent" resultType="Float">
     SELECT AVG(true1)
     FROM ${table}
-    WHERE hour1 = ${hour}
-    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    WHERE (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
     AND (lat BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+    AND hour1 = ${hour};
   </select>
 
     <select id="listAllRate" resultType="com.qg.www.models.Rate">
     SELECT geohash, feature1, feature2, feature3, feature4, feature5, feature6, feature7, feature8, feature9
     FROM ${table}
-    WHERE hour1 =${hour}
-    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    WHERE (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
     AND (lat BETWEEN ${data.rightBottomLat} AND ${data.leftTopLat})
+    AND hour1 =${hour};
     </select>
 
-    <select id="getAvgRate" resultType="Double">
+    <select id="getAvgRate" resultType="Float">
     SELECT AVG(rate)
     FROM ${table}
-    WHERE hour1 = ${hour}
-    AND (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
+    WHERE (lon BETWEEN ${data.leftTopLon} AND ${data.rightBottomLon})
     AND (lat BETWEEN  ${data.rightBottomLat}AND ${data.leftTopLat})
+    AND hour1 = ${hour};
     </select>
 
 </mapper>
