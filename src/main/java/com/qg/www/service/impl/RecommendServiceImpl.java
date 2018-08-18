@@ -91,10 +91,10 @@ public class RecommendServiceImpl implements RecommendService {
                 e.printStackTrace();
             }
             //如果数据挖掘给的返回的路线索引不为0，则正常响应给前端；
-            if (null!=bigData&&bigData.getIndex()!=0){
+            if (null != bigData && bigData.getIndex() != 0) {
                 responseData.setIndex(bigData.getIndex());
                 responseData.setStatus(Status.NORMAL.getStatus());
-            }else {
+            } else {
                 //否则，数据挖掘预测失败；
                 responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
             }

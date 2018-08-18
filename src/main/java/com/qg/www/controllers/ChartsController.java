@@ -32,6 +32,7 @@ public class ChartsController {
 
     /**
      * 得到未来某地区的出租车利用率
+     *
      * @param data 经纬度范围和当前时间
      * @return 当前时间前后共6个时间段的出租车利用率
      */

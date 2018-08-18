@@ -7,8 +7,6 @@ import com.qg.www.service.RecommendService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * @author net
@@ -21,6 +19,7 @@ import java.io.IOException;
 public class RoadAndCarController {
     @Resource
     private RecommendService recommendService;
+
     /**
      * 得到最优路径
      *
@@ -31,15 +30,4 @@ public class RoadAndCarController {
     public ResponseData getBestWay(@RequestBody InteractionData data) {
         return recommendService.getBestWay(data);
     }
-    /*@PostMapping("/querybestway")
-    public  String getBestWay( HttpServletRequest request){
-        try {
-            String s=request.getReader().readLine();
-            System.out.println(s);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 }
