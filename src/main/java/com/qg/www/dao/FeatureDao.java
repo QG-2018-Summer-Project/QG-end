@@ -27,7 +27,7 @@ public interface FeatureDao {
      * @param hour 查询的时间段
      * @return 一个出租车利用率平均值
      */
-    Double getAvgPercent(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
+    Float getAvgPercent(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
 
     /**
      * 查询rate表中所有特征值
@@ -45,5 +45,5 @@ public interface FeatureDao {
      * @param hour 查询的时间段
      * @return
      */
-    Double getAvgRate(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
+    Float getAvgRate(@Param("data") InteractionData data,@Param("table") String table, @Param("hour") Integer hour);
 }

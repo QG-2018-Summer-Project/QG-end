@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class HeatMapServiceImpl implements HeatMapService {
      */
     @Override
     public ResponseData querySomeTimesMap(InteractionData data) {
+        System.out.println("shoudao");
         //定义第一张表名；
         String tableOne;
         //定义第二张表名；
@@ -63,8 +65,9 @@ public class HeatMapServiceImpl implements HeatMapService {
         String endTime;
         //定义列表；
         List<GeoHash> list;
-        //点集；
         List<Point> pointList;
+        //点集；
+        List<Point> nullList=new ArrayList<>();
         startTime = data.getStartTime();
         endTime = data.getEndTime();
         //如果时间不为空，则可以调用dao层进行查询；
@@ -77,16 +80,17 @@ public class HeatMapServiceImpl implements HeatMapService {
                 e.printStackTrace();
             }
             //先判断表名；如果不是跨天查询，执行下列操作；
-            if (null != tables[1] && "".equals(tables[1])) {
+            if (null == tables[1] ) {
                 tableOne = tables[0];
                 System.out.println(tableOne);
                 list = gpsDataDao.listGeoHashAndNumByTimeAndLonAndLat(data, tableOne, null);
                 //判空；
-                if (null != list) {
+                if (!list.isEmpty()) {
                     pointList = geoHashUtil.decodeAll(list);
                     responseData.setPointSet(pointList);
                 } else {
                     //查询结果为空；
+                    responseData.setPointSet(nullList);
                     responseData.setPointSet(null);
                 }
                 responseData.setStatus(Status.NORMAL.getStatus());
@@ -105,7 +109,6 @@ public class HeatMapServiceImpl implements HeatMapService {
                 }
                 responseData.setStatus(Status.NORMAL.getStatus());
             }
-
             return responseData;
         }
         responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
@@ -299,16 +302,20 @@ public class HeatMapServiceImpl implements HeatMapService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        geoHashList = bigData.getPointSet();
-        if (!geoHashList.isEmpty()){
-            pointList = geoHashUtil.decodeAll(geoHashList);
-            responseData.setPointSet(pointList);
-            responseData.setStatus(Status.NORMAL.getStatus());
-        }else {
-            //数据挖掘预测失败；
-            responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
-            responseData.setPointSet(null);
+        if(null != bigData) {
+            geoHashList = bigData.getPointSet();
+            if (null != geoHashList && !geoHashList.isEmpty()) {
+                pointList = geoHashUtil.decodeAll(geoHashList);
+                responseData.setPointSet(pointList);
+                responseData.setStatus(Status.NORMAL.getStatus());
+                return responseData;
+            }
         }
+
+        //数据挖掘预测失败；
+        responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+        responseData.setPointSet(null);
+
         return responseData;
     }
 }

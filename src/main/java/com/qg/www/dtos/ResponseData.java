@@ -3,6 +3,7 @@ package com.qg.www.dtos;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public class ResponseData<T> {
     /**
      * 百分比数组 0.99形式
      */
-    private Double[] percents;
+    private Float[] percents;
 }

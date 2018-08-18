@@ -18,7 +18,7 @@ import java.util.List;
  * @author net
  * @version 1.2
  */
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("/predict")
 public class PredictController {
@@ -32,17 +32,18 @@ public class PredictController {
     @RequestMapping(value = "/liyonglv", method = RequestMethod.POST)
     public InteractBigData xuqiuliang(@RequestBody RequestData<Feature> requestData) {
         System.out.println("我被请求了");
-        Iterator<Feature> it = requestData.getList().iterator();
+        /*Iterator<Feature> it = requestData.getList().iterator();
         while (it.hasNext()) {
             Feature feature = it.next();
             System.out.println(feature.getGeohash() + feature.getLat() + feature.getHour1());
-        }
+        }*/
+
         GeoHash geoHash = new GeoHash();
         geoHash.setGeohash("as");
         geoHash.setWeight(12);
-        geoHash.setWeight1(123);
-        geoHash.setWeight2(111);
-        geoHash.setWeight3(222);
+        geoHash.setWeight1((float) 123.0);
+        geoHash.setWeight2((float) 111.0);
+        geoHash.setWeight3((float) 222.0);
         List<GeoHash> geoHashes = new ArrayList<>();
         geoHashes.add(geoHash);
         InteractBigData interactBigData = new InteractBigData();

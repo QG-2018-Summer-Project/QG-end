@@ -5,6 +5,8 @@ import com.qg.www.dtos.InteractBigData;
 import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.dtos.ResponseData;
+import com.qg.www.enums.Status;
+import com.qg.www.enums.Table;
 import com.qg.www.enums.Url;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,19 +53,42 @@ public class ChartServiceImpl implements ChartService {
      */
     @Override
     public ResponseData getChangePercent(InteractionData data) {
+        // 查询使用的表名
         String table = "";
+        // 当前时间的月份
+        Integer currentMonth;
+        // 当前时间的天数
+        Integer currentDay;
+        // 当前时间的小时段
+        Integer currentHour;
+        // 存放特征值
+        List<Feature> featureList;
+        // 当前时间
+        String currentTime = data.getCurrentTime();
+        if (null != currentTime && currentTime.length() >= 14) {
+            // 截取预测时间的日期天数和时间
+            currentMonth = Integer.parseInt(currentTime.substring(5, 7));
+            currentDay = Integer.parseInt(currentTime.substring(8, 10));
+            currentHour = Integer.parseInt(currentTime.substring(11, 13));
+        } else {
+            //前端传递的信息错误时，返回状态码；
+            responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
+            return responseData;
+        }
         try {
             // 得到应该查询的数据表
-            table = timeUtil.getDemandTable(data.getCurrentTime(), "percent");
+            table = timeUtil.getDemandTable(currentTime, Table.PERCENT.getTable());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        // 截取预测时间的日期天数和时间
-        Integer currentMonth = Integer.parseInt(data.getCurrentTime().substring(5, 7));
-        Integer currentDay = Integer.parseInt(data.getCurrentTime().substring(8, 10));
-        Integer currentHour = Integer.parseInt(data.getCurrentTime().substring(11, 13));
+
         // 得到表中的所有信息
-        List<Feature> featureList = featureDao.listAllFeature(table, data, currentHour);
+        featureList = featureDao.listAllFeature(table, data, currentHour);
+        // 如果查到的数据为空
+        if (null == featureList) {
+            responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+            return responseData;
+        }
         // 将各参数放入交互model中
         requestData = new RequestData<>();
         requestData.setDay1(currentDay);
@@ -76,53 +102,63 @@ public class ChartServiceImpl implements ChartService {
             e.printStackTrace();
         }
 
-        geoHashList = bigData.getPointSet();
-        Double[] percents = new Double[6];
+        Float[] percents = new Float[6];
 
-        if (currentHour < 3) {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                calendar.setTime(sdf.parse(data.getCurrentTime()));
-                // 提前一小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "percent");
-                percents[2] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR));
-                // 提前两小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "percent");
-                percents[1] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR));
-                // 提前三小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "percent");
-                percents[0] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR));
+        if (null != bigData) {
+            geoHashList = bigData.getPointSet();
+            if (null != geoHashList) {
+                if (currentHour < 3) {
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        calendar.setTime(sdf.parse(data.getCurrentTime()));
+                        // 提前一小时
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.PERCENT.getTable());
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
+                        percents[2] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+                        System.out.println(percents[2]);
+                        // 提前两小时
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.PERCENT.getTable());
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                        percents[1] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+                        // 提前三小时
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.PERCENT.getTable());
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
+
+                        percents[0] = featureDao.getAvgPercent(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if (currentHour > 21) {
+                    responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+                    return responseData;
+                } else {
+                    // 查询数据库得到前三、二、一小时的出租车数量变化率的平均值
+                    percents[0] = featureDao.getAvgPercent(data, table, currentHour - 3);
+                    percents[1] = featureDao.getAvgPercent(data, table, currentHour - 2);
+                    percents[2] = featureDao.getAvgPercent(data, table, currentHour - 1);
+                }
+                // 判断数据库中是否存在数据
+                if(null == percents[0]){
+                    //查询成功，但是数据为空；
+                    responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+                    return responseData;
+                }
+                // 遍历得到数据挖掘端传过来的值的平均值
+                responseData.setPercents(getAvgWeight(geoHashList, percents));
+                responseData.setStatus(Status.NORMAL.getStatus());
+                return responseData;
             }
-        } else if (currentHour > 21) {
-            //TODO 无法查询
-        } else {
-            // 查询数据库得到前三、二、一小时的出租车数量变化率的平均值
-            percents[0] = featureDao.getAvgPercent(data, table, currentHour - 3);
-            percents[1] = featureDao.getAvgPercent(data, table, currentHour - 2);
-            percents[2] = featureDao.getAvgPercent(data, table, currentHour - 1);
         }
-        // 遍历得到数据挖掘端传过来的值的平均值
-        int i = 0;
-        double currentPercent = 0;
-        double oneLatePercent = 0;
-        double twoLatePercent = 0;
-        for (GeoHash geoHash : geoHashList) {
-            currentPercent += geoHash.getWeight1();
-            oneLatePercent += geoHash.getWeight2();
-            twoLatePercent += geoHash.getWeight3();
-            i++;
-        }
-        percents[3] = currentPercent / i;
-        percents[4] = oneLatePercent / i;
-        percents[5] = twoLatePercent / i;
-        responseData.setPercents(percents);
+
+        //查询成功，但是数据为空；
+        responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+
         return responseData;
     }
 
@@ -134,69 +170,126 @@ public class ChartServiceImpl implements ChartService {
      */
     @Override
     public ResponseData getUtilizePercent(InteractionData data) {
+        // 查询使用的表名
         String table = "";
+        // 当前时间的月份
+        Integer currentMonth;
+        // 当前时间的天数
+        Integer currentDay;
+        // 当前时间的小时段
+        Integer currentHour;
+        // 存放特征值
+        List<Rate> rateList;
+        // 当前时间
+        String currentTime = data.getCurrentTime();
+        if (null != currentTime && currentTime.length() >= 14) {
+            // 截取预测时间的日期天数和时间
+            currentMonth = Integer.parseInt(currentTime.substring(5, 7));
+            currentDay = Integer.parseInt(currentTime.substring(8, 10));
+            currentHour = Integer.parseInt(currentTime.substring(11, 13));
+        } else {
+            //前端传递的信息错误时，返回状态码；
+            responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
+            return responseData;
+        }
         try {
             // 得到应该查询的数据表
-            table = timeUtil.getDemandTable(data.getCurrentTime(), "rate");
+            table = timeUtil.getDemandTable(currentTime, Table.RATE.getTable());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        // 截取预测时间的日期天数和时间
-        Integer currentMonth = Integer.parseInt(data.getCurrentTime().substring(5, 7));
-        Integer currentDay = Integer.parseInt(data.getCurrentTime().substring(8, 10));
-        Integer currentHour = Integer.parseInt(data.getCurrentTime().substring(11, 13));
+
         // 得到表中的所有信息
-        List<Rate> rateList = featureDao.listAllRate(table, data, currentHour);
+        rateList = featureDao.listAllRate(table, data, currentHour);
+        // 如果查到的数据为空
+        if (null == rateList) {
+            responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+            return responseData;
+        }
         // 将各参数放入交互model中
         requestData = new RequestData<>();
         requestData.setDay1(currentDay);
         requestData.setHour1(currentHour);
         requestData.setMonth1(currentMonth);
         requestData.setList(rateList);
-        // 得到数据挖掘端预测的当前时段与未来一、二小时的出租车平均利用率
+        // 得到数据挖掘端预测的当前时段与未来一、二小时的流量变化率
         try {
             bigData = HttpClientUtil.demandedCount(Url.UTILIZE_PERCENT.getUrl(), requestData);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        geoHashList = bigData.getPointSet();
-        Double[] percents = new Double[6];
+        Float[] percents = new Float[6];
 
-        if (currentHour < 3) {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                calendar.setTime(sdf.parse(data.getCurrentTime()));
-                // 提前一小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "rate");
-                percents[2] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR));
-                // 提前两小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "rate");
-                percents[1] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR));
-                // 提前三小时
-                calendar.add(Calendar.HOUR, -1);
-                table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), "rate");
-                percents[0] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR));
+        if (null != bigData) {
+            geoHashList = bigData.getPointSet();
+            if (null != geoHashList) {
+                if (currentHour < 3) {
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        calendar.setTime(sdf.parse(data.getCurrentTime()));
+                        // 提前一小时
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.RATE.getTable());
+                        percents[2] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
+                        // 提前两小时
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.RATE.getTable());
+                        percents[1] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+                        System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
+
+                        // 提前三小时
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        table = timeUtil.getDemandTable(sdf.format(calendar.getTime()), Table.RATE.getTable());
+                        percents[0] = featureDao.getAvgRate(data, table, calendar.get(Calendar.HOUR_OF_DAY));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if (currentHour > 21) {
+                    responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+                    return responseData;
+                } else {
+                    // 查询数据库得到前三、二、一小时的出租车数量变化率的平均值
+                    percents[0] = featureDao.getAvgRate(data, table, currentHour - 3);
+                    percents[1] = featureDao.getAvgRate(data, table, currentHour - 2);
+                    percents[2] = featureDao.getAvgRate(data, table, currentHour - 1);
+                }
+                // 判断数据库中是否存在数据
+                if(null == percents[0]){
+                    //查询成功，但是数据为空；
+                    responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+                    return responseData;
+                }
+
+                percents[0] *= 100;
+                percents[1] *= 100;
+                percents[2] *= 100;
+
+                // 遍历得到数据挖掘端传过来的值的平均值
+                responseData.setPercents(getAvgWeight(geoHashList, percents));
+                responseData.setStatus(Status.NORMAL.getStatus());
+                return responseData;
             }
-        } else if (currentHour > 21) {
-            //TODO 无法查询
-        } else {
-            // 查询数据库得到前三、二、一小时的出租车数量变化率的平均值
-            percents[0] = featureDao.getAvgRate(data, table, currentHour - 3);
-            percents[1] = featureDao.getAvgRate(data, table, currentHour - 2);
-            percents[2] = featureDao.getAvgRate(data, table, currentHour - 1);
         }
+
+
+        //查询成功，但是数据为空；
+        responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+
+        return responseData;
+    }
+
+    private Float[] getAvgWeight(List<GeoHash> geoHashList, Float[] percents) {
         // 遍历得到数据挖掘端传过来的值的平均值
         int i = 0;
-        double currentPercent = 0;
-        double oneLatePercent = 0;
-        double twoLatePercent = 0;
+        float currentPercent = 0;
+        float oneLatePercent = 0;
+        float twoLatePercent = 0;
         for (GeoHash geoHash : geoHashList) {
             currentPercent += geoHash.getWeight1();
             oneLatePercent += geoHash.getWeight2();
@@ -206,8 +299,12 @@ public class ChartServiceImpl implements ChartService {
         percents[3] = currentPercent / i;
         percents[4] = oneLatePercent / i;
         percents[5] = twoLatePercent / i;
-        responseData.setPercents(percents);
-        return responseData;
-    }
 
+        // 将Float数组转化为小数位一位
+        DecimalFormat df = new DecimalFormat("0.0");
+        for(i = 0; i < 6; i++){
+            percents[i] = Float.valueOf(df.format(percents[i]));
+        }
+        return percents;
+    }
 }

@@ -27,6 +27,7 @@ public class ChartsController {
      */
     @PostMapping("/changepercent")
     public ResponseData getChangePercent(@RequestBody InteractionData data) {
+        System.out.println("开始");
         return chartService.getChangePercent(data);
     }
 
