@@ -28,9 +28,9 @@ public class Routes {
     /**
      * 路线所花的时间；
      */
-    private Long allTime;
+    private Integer allTime;
     /**
      * 该路线的全长；
      */
-    private Long distance;
+    private Integer distance;
 }

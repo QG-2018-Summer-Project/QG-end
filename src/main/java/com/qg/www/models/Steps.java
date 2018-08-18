@@ -20,18 +20,18 @@ public class Steps {
     /**
      * 路径集合；
      */
-    private List<Point> path;
+    private List<RoutePoint> path;
     /**
      * 起点；
      */
-    private Point startLocation;
+    private RoutePoint startLocation;
     /**
      * 终点；
      */
-    private Point endLocation;
+    private RoutePoint endLocation;
     /**
      * 该路段花费的时间；
      */
-    private Long time;
+    private Integer time;
 
 }

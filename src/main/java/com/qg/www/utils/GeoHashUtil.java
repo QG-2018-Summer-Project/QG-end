@@ -11,7 +11,7 @@ import java.util.*;
 @Service("geoHashUtil")
 public class GeoHashUtil {
     @Resource
-    GeoHash geoHash;
+    private GeoHash geoHash;
 
     /**
      * 经纬度单独编码长度

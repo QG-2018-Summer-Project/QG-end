@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -225,6 +226,11 @@ public class HeatMapServiceImpl implements HeatMapService {
         }
         // 得到表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
+        //测试
+        Iterator<Feature> iterator=featureList.iterator();
+        while(iterator.hasNext()){
+            System.out.println(iterator.next().getGeohash());
+        }
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
         requestData.setDay1(day);
@@ -276,7 +282,7 @@ public class HeatMapServiceImpl implements HeatMapService {
         if (null != predictTime && predictTime.length() >= 14){
             try {
                 // 得到应该查询的数据表
-                table = timeUtil.getDemandTable(data.getPredictedTime(), "data");
+                table = timeUtil.getDemandTable(data.getPredictedTime(), "count");
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -289,8 +295,14 @@ public class HeatMapServiceImpl implements HeatMapService {
             responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
             return responseData;
         }
+        System.out.println(hour);
         // 得到特征表中的所有信息
         List<Feature> featureList = featureDao.listAllFeature(table, data, hour);
+        //测试
+        Iterator<Feature> iterator=featureList.iterator();
+        while(iterator.hasNext()){
+            System.out.println(iterator.next().getGeohash());
+        }
         // 将各参数放入交互model中
         RequestData<Feature> requestData = new RequestData<>();
         requestData.setDay1(day);

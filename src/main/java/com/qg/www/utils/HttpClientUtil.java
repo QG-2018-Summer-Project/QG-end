@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 
-@Service
+@Service("httpClientUtil")
 public class HttpClientUtil {
 
     @Autowired
