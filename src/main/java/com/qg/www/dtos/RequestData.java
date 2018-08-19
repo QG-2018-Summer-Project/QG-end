@@ -27,4 +27,11 @@ public class RequestData<T> {
      * 数据列表；
      */
     private List<T> list;
+
+    private List<T> oneHourAgo;
+
+    private List<T> twoHourAgo;
+
+    private List<T> threeHourAgo;
+
 }

@@ -29,7 +29,7 @@
   </sql>
 
     <select id="listAllFeature" resultType="com.qg.www.models.Feature">
-    SELECT geohash, month1, day1, hour1, dure1, dure2, dure3, dure4, dure5, dure6,
+    SELECT geohash, dure1, dure2, dure3, dure4, dure5, dure6,
     dure7, one, two, three, four, five
     FROM ${table}  WHERE  (lon BETWEEN ${data.leftTopLon} And ${data.rightBottomLon})And (lat BETWEEN ${data.rightBottomLat} AND
     ${data.leftTopLat} And hour1 =${hour});

@@ -1,5 +1,7 @@
 package com.qg.www.enums;
 
+import javax.ws.rs.POST;
+
 /**
  * @author net
  * @version 1.3
@@ -29,7 +31,11 @@ public enum  Table {
     /**
      * 出租车数据
      */
-    GPS_DATA("gpsdata");
+    GPS_DATA("gpsdata"),
+    /**
+     * 拥挤率表
+     */
+    CROWDED("as");
 
 
     private String table;
