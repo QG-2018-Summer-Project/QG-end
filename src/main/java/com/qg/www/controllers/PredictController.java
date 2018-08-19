@@ -2,6 +2,7 @@ package com.qg.www.controllers;
 
 
 import com.qg.www.dtos.InteractBigData;
+import com.qg.www.dtos.InteractionData;
 import com.qg.www.dtos.RequestData;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
@@ -49,5 +50,12 @@ public class PredictController {
         InteractBigData interactBigData = new InteractBigData();
         interactBigData.setPointSet(geoHashes);
         return interactBigData;
+    }
+    @PostMapping("/test")
+    public String testReceive(@RequestBody InteractionData data){
+        Integer[]integers=data.getSteps();
+        System.out.println(integers.length);
+        System.out.println(integers[1]);
+        return "测试";
     }
 }

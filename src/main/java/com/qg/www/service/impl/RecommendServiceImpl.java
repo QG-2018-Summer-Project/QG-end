@@ -94,6 +94,7 @@ public class RecommendServiceImpl implements RecommendService {
             if (null != bigData && bigData.getIndex() != 0) {
                 responseData.setIndex(bigData.getIndex());
                 responseData.setStatus(Status.NORMAL.getStatus());
+                responseData.setSteps(bigData.getSteps());
             } else {
                 //否则，数据挖掘预测失败；
                 responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());

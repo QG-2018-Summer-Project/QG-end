@@ -41,5 +41,8 @@ public class ChartsController {
     public ResponseData getUtilizePercent(@RequestBody InteractionData data) {
         return chartService.getUtilizePercent(data);
     }
+    public ResponseData getExceptionCase(@RequestBody InteractionData data){
+        return null;
+    }
 
 }
