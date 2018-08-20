@@ -1,6 +1,7 @@
 package com.qg.www.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.qg.www.models.ExceptionCase;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,8 @@ public class ResponseData<T> {
      * 最优路径索引；
      */
     private Integer index;
-
+    /**
+     * 返回最优路线
+     */
+    private Integer[] steps;
 }

@@ -33,6 +33,7 @@ public class ChartsController {
 
     /**
      * 得到未来某地区的出租车利用率
+     *
      * @param data 经纬度范围和当前时间
      * @return 当前时间前后共6个时间段的出租车利用率
      */
@@ -47,5 +48,16 @@ public class ChartsController {
     }
 
 
+
+    /**
+     * 获取地区异常情况
+     *
+     * @param data 当前时间
+     * @return 异常情况和原因分析
+     */
+    @PostMapping("/exception")
+    public ResponseData getExceptionCase(@RequestBody InteractionData data) {
+        return chartService.getExceptionCase(data);
+    }
 
 }

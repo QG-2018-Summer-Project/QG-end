@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 public class RoadAndCarController {
     @Resource
     private RecommendService recommendService;
+
     /**
      * 得到最优路径
      *
@@ -29,5 +30,4 @@ public class RoadAndCarController {
     public ResponseData getBestWay(@RequestBody InteractionData data) {
         return recommendService.getBestWay(data);
     }
-
 }

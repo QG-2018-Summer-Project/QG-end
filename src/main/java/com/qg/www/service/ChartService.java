@@ -35,4 +35,11 @@ public interface ChartService {
      */
     ResponseData<Feature> getCrowdedPercent(InteractionData data);
 
+    /**
+     * 获取地区异常情况
+     * @param data 当前时间
+     * @return 状态码和
+     */
+    ResponseData getExceptionCase(@RequestBody InteractionData data);
+
 }

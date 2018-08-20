@@ -6,7 +6,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-  <!-- Spring控制调派器配置-->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <!-- Spring控制调派器配置-->
   <display-name>Archetype Created Web Application</display-name>
 
   <!-- Spring和mybatis的配置文件 -->

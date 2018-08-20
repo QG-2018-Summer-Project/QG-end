@@ -35,5 +35,12 @@ public class RequestData<T> {
     private List<T> twoHourAgo;
 
     private List<T> threeHourAgo;
+    /**
+     * 以下是请求异常数据；
+     */
+    private Integer year;
+    private Integer month;
+    private Integer day;
+    private Integer hour;
 
 }

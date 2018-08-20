@@ -8,6 +8,7 @@ import com.qg.www.dtos.ResponseData;
 import com.qg.www.enums.Status;
 import com.qg.www.enums.Table;
 import com.qg.www.enums.Url;
+import com.qg.www.models.ExceptionCase;
 import com.qg.www.models.Feature;
 import com.qg.www.models.GeoHash;
 import com.qg.www.models.Rate;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -558,4 +560,44 @@ public class ChartServiceImpl implements ChartService {
         return percents;
     }
 
+    /**
+     * 获取地区异常情况
+     *
+     * @param data 当前时间
+     * @return 状态码和异常情况
+     */
+    @Override
+    public ResponseData getExceptionCase(InteractionData data) {
+        ResponseData<ExceptionCase> responseData = new ResponseData<>();
+        String currentTime = data.getCurrentTime();
+        Integer[] steps = new Integer[1];
+        if (currentTime == null) {
+            //前端请求数据出错
+            responseData.setStatus(Status.DATAFROM_WEB_ERROR.getStatus());
+            responseData.setSteps(steps);
+        } else {
+            Integer year = Integer.parseInt(currentTime.substring(0, 3));
+            Integer month = Integer.parseInt(currentTime.substring(5, 7));
+            Integer day = Integer.parseInt(currentTime.substring(8, 10));
+            Integer hour = Integer.parseInt(currentTime.substring(11, 13));
+            requestData.setYear(year);
+            requestData.setMonth(month);
+            requestData.setDay(day);
+            requestData.setHour(hour);
+            try {
+                bigData = HttpClientUtil.demandedCount(Url.EXCEPTION_CASE.getUrl(), requestData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //数据挖掘返回数据不为空
+            if (bigData != null) {
+                responseData.setPointSet(bigData.getAlist());
+                responseData.setStatus(Status.NORMAL.getStatus());
+            }else {
+                responseData.setStatus(Status.PREDICTDATA_LACK.getStatus());
+                responseData.setPointSet(new ArrayList<ExceptionCase>());
+            }
+        }
+        return responseData;
+    }
 }

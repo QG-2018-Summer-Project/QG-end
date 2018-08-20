@@ -33,5 +33,9 @@ public class Steps {
      * 该路段花费的时间；
      */
     private Integer time;
+    /**
+     * 该路段的长度；
+     */
+    private Integer length;
 
 }
