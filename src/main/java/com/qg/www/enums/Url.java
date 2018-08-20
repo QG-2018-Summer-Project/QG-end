@@ -20,12 +20,12 @@ public enum Url {
     /**
      * 请求地区的未来一、二、三小时流量变化率
      */
-    CHANGE_PERCENT("http://:8080/qgtaxi/predict/percent"),
+    CHANGE_PERCENT("http://127.0.0.1:8080/qgtaxi/predict/liyonglv"),
 
     /**
      * 请求地区的未来一、二、三小时出租车利用率
      */
-    UTILIZE_PERCENT("http://:8080/qgtaxi/predict/liyonglv"),
+    UTILIZE_PERCENT("http://127.0.0.1:8080/qgtaxi/predict/liyonglv"),
     /**
      * 路线推荐
      */
