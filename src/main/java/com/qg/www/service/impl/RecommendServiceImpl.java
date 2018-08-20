@@ -27,8 +27,6 @@ import java.util.List;
 @Service
 public class RecommendServiceImpl implements RecommendService {
     @Resource
-    private ResponseData responseData;
-    @Resource
     private GeoHashUtil geoHashUtil;
     @Resource
     private RequestData<Routes> requestData;
@@ -44,6 +42,8 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     public ResponseData getBestWay(InteractionData data) {
         System.out.println("路径推荐请求！");
+        //定义返回model
+        ResponseData<RoutePoint> responseData = new ResponseData<>();
         //定义路线列表；
         List<Routes> routesList = data.getRoutes();
         //定义步骤列表；

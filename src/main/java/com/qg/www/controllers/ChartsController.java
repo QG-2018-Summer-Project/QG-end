@@ -41,4 +41,11 @@ public class ChartsController {
         return chartService.getUtilizePercent(data);
     }
 
+    @PostMapping("crowded")
+    public ResponseData getCrowdedPercent(@RequestBody InteractionData data){
+        return chartService.getCrowdedPercent(data);
+    }
+
+
+
 }

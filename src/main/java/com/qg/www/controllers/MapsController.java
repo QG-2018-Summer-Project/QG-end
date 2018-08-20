@@ -29,6 +29,7 @@ public class MapsController {
      */
     @PostMapping("/liveheatmap")
     public ResponseData getLiveMap(@RequestBody InteractionData interactionData) {
+        System.out.println("实时热力图");
         return heatMapService.getLiveMap(interactionData);
     }
 

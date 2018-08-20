@@ -38,11 +38,7 @@ public class ChartServiceImpl implements ChartService {
     @Resource
     private InteractBigData bigData;
     @Resource
-    private ResponseData responseData;
-    @Resource
     private List<GeoHash> geoHashList;
-    @Resource
-    private RequestData requestData;
 
 
     /**
@@ -64,6 +60,7 @@ public class ChartServiceImpl implements ChartService {
         // 当前时间
         String currentTime = data.getCurrentTime();
         RequestData<Feature> requestData = new RequestData<>();
+        ResponseData<Feature> responseData = new ResponseData<>();
         if (null != currentTime && currentTime.length() >= 14) {
             // 截取预测时间的日期天数和时间
             currentMonth = Integer.parseInt(currentTime.substring(5, 7));
@@ -360,6 +357,13 @@ public class ChartServiceImpl implements ChartService {
         return responseData;
     }
 
+    /**
+     * 得到过去和未来广州市交通的拥堵率
+     *
+     * @param data 经纬度范围和当前时间
+     * @return 6段拥堵率
+     */
+    @Override
     public ResponseData<Feature> getCrowdedPercent(InteractionData data) {
         // 查询使用的表名
         String table = "";
@@ -517,7 +521,13 @@ public class ChartServiceImpl implements ChartService {
         return responseData;
     }
 
-
+    /**
+     * 遍历数组并得到其平均值，取一位小叔威武
+     * @param geoHashList
+     * @param percents
+     * @param table
+     * @return
+     */
     private Float[] getAvgWeight(List<GeoHash> geoHashList, Float[] percents, String table) {
         // 遍历得到数据挖掘端传过来的值的平均值
         int i = 0;
@@ -543,7 +553,7 @@ public class ChartServiceImpl implements ChartService {
         // 将Float数组转化为小数位一位
         DecimalFormat df = new DecimalFormat("0.0");
         for (i = 0; i < 6; i++) {
-            percents[i] = Float.valueOf(df.format(percents[i]));
+                percents[i] = Float.valueOf(df.format(percents[i]));
         }
         return percents;
     }
