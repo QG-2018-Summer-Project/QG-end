@@ -41,8 +41,16 @@ public class ChartsController {
     public ResponseData getUtilizePercent(@RequestBody InteractionData data) {
         return chartService.getUtilizePercent(data);
     }
-    public ResponseData getExceptionCase(@RequestBody InteractionData data){
-        return null;
+
+    /**
+     * 获取地区异常情况
+     *
+     * @param data 当前时间
+     * @return 异常情况和原因分析
+     */
+    @PostMapping("/exception")
+    public ResponseData getExceptionCase(@RequestBody InteractionData data) {
+        return chartService.getExceptionCase(data);
     }
 
 }

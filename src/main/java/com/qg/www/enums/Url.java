@@ -29,7 +29,11 @@ public enum Url {
     /**
      * 路线推荐
      */
-    ROUTE_RECOMMEND("http://192.168.31.218:5000/qgtaxi/route/recommend")
+    ROUTE_RECOMMEND("http://192.168.31.218:5000/qgtaxi/route/recommend"),
+    /**
+     * 异常情况
+     */
+    EXCEPTION_CASE("http://192.168.1.106:5000/qgtaxi/other/strange")
     ;
 
     private String url;

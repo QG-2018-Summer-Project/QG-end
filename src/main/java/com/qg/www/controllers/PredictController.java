@@ -33,12 +33,6 @@ public class PredictController {
     @RequestMapping(value = "/liyonglv", method = RequestMethod.POST)
     public InteractBigData xuqiuliang(@RequestBody RequestData<Feature> requestData) {
         System.out.println("我被请求了");
-        /*Iterator<Feature> it = requestData.getList().iterator();
-        while (it.hasNext()) {
-            Feature feature = it.next();
-            System.out.println(feature.getGeohash() + feature.getLat() + feature.getHour1());
-        }*/
-
         GeoHash geoHash = new GeoHash();
         geoHash.setGeohash("as");
         geoHash.setWeight(12);
@@ -51,11 +45,5 @@ public class PredictController {
         interactBigData.setPointSet(geoHashes);
         return interactBigData;
     }
-    @PostMapping("/test")
-    public String testReceive(@RequestBody InteractionData data){
-        Integer[]integers=data.getSteps();
-        System.out.println(integers.length);
-        System.out.println(integers[1]);
-        return "测试";
-    }
+
 }
